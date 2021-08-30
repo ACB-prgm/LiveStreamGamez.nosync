@@ -1,0 +1,45 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+[application]
+
+config/name="LiveStreamGamez"
+run/main_scene="res://MainScene/Main.tscn"
+boot_splash/image="res://Bootsplash.png"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
+config/icon="res://icon.png"
+
+[autoload]
+
+GetPythonChatScrape="*res://ChatScraping/GetPythonChatScrape.gd"
+
+[debug]
+
+gdscript/completion/autocomplete_setters_and_getters=true
+
+[display]
+
+window/size/width=2560
+window/size/height=1440
+window/per_pixel_transparency/allowed=true
+window/per_pixel_transparency/enabled=true
+
+[gdnative]
+
+singletons=[  ]
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_clear_color=Color( 0.301961, 0.301961, 0.301961, 0 )
+environment/default_environment="res://default_env.tres"
