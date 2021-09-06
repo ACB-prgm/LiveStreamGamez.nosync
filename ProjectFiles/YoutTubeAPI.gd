@@ -4,7 +4,7 @@ extends Node
 var LiveChatID : String
 var nextPageToken : String
 var timer := Timer.new()
-
+var token = null
 
 func _ready():
 	add_child(timer)
@@ -22,7 +22,7 @@ func get_LiveChatID():
 	
 	var request_url := "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet&broadcastStatus=active"
 	var headers := [
-		"Authorization: Bearer %s" % OAuth2.token,
+		"Authorization: Bearer %s" % token,
 		"Accept: application/json"
 	]
 	
@@ -55,7 +55,7 @@ func get_LiveChat_messages():
 		request_url += "&pageToken=%s" % nextPageToken
 
 	var headers := [
-		"Authorization: Bearer %s" % OAuth2.token,
+		"Authorization: Bearer %s" % token,
 		"Accept: application/json"
 	]
 	

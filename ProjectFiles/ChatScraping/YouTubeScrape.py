@@ -32,6 +32,7 @@ def main():
             chat_src = soup.find(id="chat").find("iframe").get("src")
 
             driver_pids = get_chrome_pids(user_pids)
+            driver_pids.insert(0, "PIDs")
             send_chat(driver_pids)
         
         get_chat(driver)
@@ -60,8 +61,9 @@ def get_chat(driver):
                     chat.append(item)
             
             if chat:
-                send_chat(chat)
                 lastChat.extend(chat)
+                chat.insert(0, "CHAT")
+                send_chat(chat)
             
             SUCCESS = True
         
