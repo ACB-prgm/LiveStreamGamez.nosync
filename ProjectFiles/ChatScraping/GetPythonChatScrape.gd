@@ -20,8 +20,7 @@ func _notification(what):
 
 func _ready():
 	set_process(false)
-	start_listening()
-	start_keyboard_input()
+#	start_listening()
 
 
 func _process(_delta):
@@ -68,6 +67,7 @@ func start_scraping():
 
 func start_keyboard_input():
 	var PID = OS.execute("sudo", ["/usr/local/bin/python3.9", global_path_to_dir + "/KeyboardInput.py"], false)
+# warning-ignore:return_value_discarded
 	OS.execute(str(PID), ["REB@6312"])
 	process_pids.append(PID)
 

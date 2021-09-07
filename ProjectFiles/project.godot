@@ -19,6 +19,8 @@ config/icon="res://icon.png"
 [autoload]
 
 GetPythonChatScrape="*res://ChatScraping/GetPythonChatScrape.gd"
+OAuth2="*res://OAuth2/OAuth2.gd"
+YoutTubeApi="*res://ChatScraping/YoutTubeAPI.gd"
 
 [debug]
 
