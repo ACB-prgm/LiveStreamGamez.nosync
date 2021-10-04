@@ -7,8 +7,10 @@ var server := UDPServer.new()
 var ip_address : String
 var is_broadcasting := false
 var process_pids := []
+var LiveStream_URL := "https://www.youtube.com/watch?v="
 
 onready var global_path_to_dir = ProjectSettings.globalize_path("res://ChatScraping")
+onready var interpreter_path = ProjectSettings.globalize_path("res://venv/bin/python")
 
 
 func _notification(what):
@@ -20,7 +22,11 @@ func _notification(what):
 
 func _ready():
 	set_process(false)
-#	start_listening()
+	
+	yield(YoutTubeApi, "BroadcastID_recieved")
+	LiveStream_URL += YoutTubeApi.BroadcastID
+	start_listening()
+	start_scraping()
 
 
 func _process(_delta):
@@ -61,12 +67,12 @@ func stop_listening():
 
 
 func start_scraping():
-	var PID = OS.execute("/usr/local/bin/python3.9", [global_path_to_dir + "/YouTubeScrape.py"], false)
+	var PID = OS.execute(interpreter_path, [global_path_to_dir + "/YouTubeScrape.py", LiveStream_URL], false)
 	process_pids.append(float(PID))
 
 
 func start_keyboard_input():
-	var PID = OS.execute("sudo", ["/usr/local/bin/python3.9", global_path_to_dir + "/KeyboardInput.py"], false)
+	var PID = OS.execute("sudo", [interpreter_path, global_path_to_dir + "/KeyboardInput.py"], false)
 # warning-ignore:return_value_discarded
 	OS.execute(str(PID), ["REB@6312"])
 	process_pids.append(PID)

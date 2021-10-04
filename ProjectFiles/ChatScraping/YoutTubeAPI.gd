@@ -1,22 +1,27 @@
 extends Node
 
 
-var LiveChatID : String
+var BroadcastID : String
 var LiveBroadcastResource : Dictionary
 var nextPageToken : String
 var timer := Timer.new()
 var token = null
+
+signal BroadcastID_recieved
+
 
 func _ready():
 	add_child(timer)
 	timer.set_wait_time(2.0)
 	timer.set_one_shot(true)
 	
-	if OAuth2.token:
-		token = OAuth2.token
-		get_LiveBroadcastResource()
-	else:
-		OS.delay_msec(100)
+#	while not OAuth2.token:
+#		print("Waiting for Token")
+#		yield(get_tree().create_timer(0.1), "timeout")
+	
+	yield(OAuth2, "token_recieved")
+	token = OAuth2.token
+	get_LiveBroadcastResource()
 
 
 func get_LiveBroadcastResource():
@@ -45,9 +50,12 @@ func _on_http_request_get_LiveBroadcastResource(_result, _response_code, _header
 		return
 	
 	var data = json_result.result
-	print(data)
-	print(data.get("items")[0].get("id"))
-	LiveChatID = data.get("items")[0].get("id")
+	if data.get("items").size() > 0:
+		BroadcastID = data.get("items")[0].get("id")  ##### ADD CHECKS FOR ERRORS
+		emit_signal("BroadcastID_recieved")
+	else:
+		print("ERROR : NO ACTIVE STREAM ON CHANNEL")
+	
 	
 	
 #	get_LiveChat_messages()

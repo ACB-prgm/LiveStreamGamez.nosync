@@ -1,23 +1,27 @@
-import json
-import time
-import socket
-import psutil
+from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
-from webdriver_manager import driver
-from webdriver_manager.chrome import ChromeDriverManager
+import socket
+import psutil
+import json
+import time
+import sys
 
 
 opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 LiveStream_URL = "https://www.youtube.com/watch?v=5qap5aO4i9A"
 YouTube_BaseURL = "https://www.youtube.com"
-chat_src = ""
-lastChat = []
 UDP_IP = "127.0.0.1"
 UDP_PORT = 4243
+chat_src = ""
+lastChat = []
 
 
 def main():
+    if len(sys.argv) > 1:
+        global LiveStream_URL
+        LiveStream_URL = sys.argv[1]
+
     global chat_src
     user_pids = get_chrome_pids()
     driver_pids = []
