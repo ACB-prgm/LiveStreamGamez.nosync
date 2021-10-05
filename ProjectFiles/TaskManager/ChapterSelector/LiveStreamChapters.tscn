@@ -1,0 +1,83 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://TaskManager/ChapterSelector/LiveStreamChapters.gd" type="Script" id=1]
+[ext_resource path="res://TaskManager/Flat-it - BioSans-Regular.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://TaskManager/OutlineOnlyStylebox.tres" type="StyleBox" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+bg_color = Color( 0.13, 0.14, 0.19, 0.5 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="DynamicFont" id=4]
+size = 48
+font_data = ExtResource( 2 )
+
+[node name="ChaptersSelectPopup" type="Popup"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -960.0
+margin_top = -540.0
+margin_right = 960.0
+margin_bottom = 540.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1900.0
+margin_bottom = 1060.0
+custom_constants/separation = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/HBoxContainer"]
+margin_right = 935.0
+margin_bottom = 1040.0
+size_flags_horizontal = 3
+
+[node name="FilesContainer" type="VBoxContainer" parent="Panel/HBoxContainer/ScrollContainer"]
+margin_right = 935.0
+margin_bottom = 1040.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChaptersDisplayTextedit" type="TextEdit" parent="Panel/HBoxContainer"]
+margin_left = 945.0
+margin_right = 1880.0
+margin_bottom = 1040.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/read_only = ExtResource( 3 )
+custom_styles/focus = SubResource( 2 )
+custom_styles/normal = ExtResource( 3 )
+custom_styles/completion = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color_readonly = Color( 1, 1, 1, 1 )
+text = "00:00:00 Intro"
+readonly = true
+
+[connection signal="about_to_show" from="." to="." method="_on_Popup_about_to_show"]

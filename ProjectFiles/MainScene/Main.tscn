@@ -1,6 +1,31 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://MainScene/Main.gd" type="Script" id=1]
+[ext_resource path="res://TaskManager/TaskManager.tscn" type="PackedScene" id=2]
+[ext_resource path="res://TaskManager/Flat-it - BioSans-Regular.otf" type="DynamicFontData" id=3]
+[ext_resource path="res://TaskManager/ChapterSelector/LiveStreamChapters.tscn" type="PackedScene" id=4]
+
+[sub_resource type="StyleBoxFlat" id=11]
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+bg_color = Color( 0.13, 0.14, 0.19, 0.5 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="DynamicFont" id=14]
+size = 64
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
 
 [node name="Main" type="Control"]
 anchor_right = 1.0
@@ -10,7 +35,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRect" type="ColorRect" parent="."]
-margin_right = 280.0
-margin_bottom = 232.0
-color = Color( 1, 0, 0, 1 )
+[node name="VBoxContainer" parent="." instance=ExtResource( 2 )]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -841.0
+margin_top = 57.0
+margin_right = -316.0
+margin_bottom = 877.0
+rect_scale = Vector2( 1.5, 1.5 )
+
+[node name="ChaptersSelectPopup" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="ChaptersButton" type="Button" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -377.0
+margin_top = -151.0
+margin_right = -32.0
+margin_bottom = -32.0
+custom_styles/hover = SubResource( 11 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 13 )
+custom_styles/disabled = SubResource( 11 )
+custom_styles/normal = SubResource( 11 )
+custom_fonts/font = SubResource( 14 )
+text = "CHAPTERS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="mouse_entered" from="ChaptersButton" to="." method="_on_ChaptersButton_mouse_entered"]
+[connection signal="mouse_exited" from="ChaptersButton" to="." method="_on_ChaptersButton_mouse_exited"]
+[connection signal="pressed" from="ChaptersButton" to="." method="_on_ChaptersButton_pressed"]

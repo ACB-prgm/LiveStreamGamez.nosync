@@ -50,8 +50,9 @@ func _on_http_request_get_LiveBroadcastResource(_result, _response_code, _header
 		return
 	
 	var data = json_result.result
-	if data.get("items").size() > 0:
-		BroadcastID = data.get("items")[0].get("id")  ##### ADD CHECKS FOR ERRORS
+	if data.get("items") and data.get("items").size() > 0:
+		LiveBroadcastResource = data.get("items")[0]
+		BroadcastID = LiveBroadcastResource.get("id")  ##### ADD CHECKS FOR ERRORS #####
 		emit_signal("BroadcastID_recieved")
 	else:
 		print("ERROR : NO ACTIVE STREAM ON CHANNEL")
