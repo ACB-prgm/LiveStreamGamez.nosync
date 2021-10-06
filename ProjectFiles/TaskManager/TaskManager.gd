@@ -104,6 +104,7 @@ func _on_set_final_duration(final_duration, title):
 	
 		save_data(title, chapters)
 
+
 func get_seconds_from_time(time):
 	# time = [hrs, mins, secs]
 	var hrs = time[0] * 3600
@@ -120,7 +121,6 @@ const SAVE_DIR = 'user://LiveStreamChapters/'
 
 func save_data(file_name, data):
 	var save_path = SAVE_DIR + file_name + ".dat"
-	print(save_path)
 	var dir = Directory.new()
 	if !dir.dir_exists(SAVE_DIR):
 		dir.make_dir_recursive(SAVE_DIR)

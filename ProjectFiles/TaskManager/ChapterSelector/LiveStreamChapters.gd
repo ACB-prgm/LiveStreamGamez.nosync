@@ -4,38 +4,72 @@ extends Popup
 const SAVE_DIR := 'user://LiveStreamChapters/'
 
 var outlineStylebox = preload("res://TaskManager/OutlineOnlyStylebox.tres")
-var button_TSCN = preload("res://TaskManager/ChapterSelector/Button.tscn")
+var button_TSCN = preload("res://TaskManager/ChapterSelector/FileButton.tscn")
 var stream_files : Array
 
 onready var filesContainer = $Panel/HBoxContainer/ScrollContainer/FilesContainer
 onready var chaptersDisplay = $Panel/HBoxContainer/ChaptersDisplayTextedit
+onready var confirmDeleteDialogue = $ConfirmationDialog
+
+
+func _ready():
+	confirmDeleteDialogue.connect("confirmed", self, "_on_confirm_delete")
+	confirmDeleteDialogue.get_cancel().connect("pressed", self, "_on_confirm_delete_cancelled")
 
 
 func _on_Popup_about_to_show():
-	stream_files = get_files_in_directory(SAVE_DIR)
-	
-	for child in filesContainer.get_children():
-		child.queue_free()
-	
-	for file in stream_files:
-		var button_INS = button_TSCN.instance()
-		button_INS.text = file
-		button_INS.connect("fileButton_pressed", self, "_on_fileButton_pressed")
-		filesContainer.add_child(button_INS)
-	print(filesContainer.get_children())
-	filesContainer.get_child(0).set_pressed(true)
-#	_on_fileButton_pressed(stream_files[0])
+	refresh_display()
 
 
 func _on_fileButton_pressed(file_name):
 	var chapters_text = ""
 	
 	if file_name:
+		for file in filesContainer.get_children():
+			if file.text != file_name:
+				file.set_pressed(false)
+		
 		var path = SAVE_DIR + file_name
 		for chapter in load_file(path):
 			chapters_text += "%s %s\n" % [get_timestring_from_secs(chapter["start_time"]), chapter["name"]]
 	
 	chaptersDisplay.text = chapters_text
+
+
+func _on_deleteButton_pressed(file_name):
+	confirmDeleteDialogue.dialog_text = file_name
+	confirmDeleteDialogue.popup()
+
+
+func refresh_display():
+	for child in filesContainer.get_children():
+		child.queue_free()
+	
+	stream_files = get_files_in_directory(SAVE_DIR)
+	
+	for file in stream_files:
+		var button_INS = button_TSCN.instance()
+		button_INS.text = file
+		button_INS.connect("fileButton_pressed", self, "_on_fileButton_pressed")
+		button_INS.connect("deleteButton_pressed", self, "_on_deleteButton_pressed")
+		filesContainer.add_child(button_INS)
+	
+	while !visible:
+		yield(get_tree().create_timer(0.01), "timeout")
+	
+	filesContainer.get_child(0).set_pressed(true)
+
+
+func _on_confirm_delete_cancelled():
+	pass
+
+func _on_confirm_delete():
+	var file_name = confirmDeleteDialogue.dialog_text
+	var dir = Directory.new()
+	dir.remove(SAVE_DIR + file_name)
+	hide()
+	popup()
+
 
 
 func get_files_in_directory(path):

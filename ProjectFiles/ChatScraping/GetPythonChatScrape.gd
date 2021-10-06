@@ -71,11 +71,11 @@ func start_scraping():
 	process_pids.append(float(PID))
 
 
-func start_keyboard_input():
-	var PID = OS.execute("sudo", [interpreter_path, global_path_to_dir + "/KeyboardInput.py"], false)
-# warning-ignore:return_value_discarded
-	OS.execute(str(PID), ["REB@6312"])
-	process_pids.append(PID)
+#func start_keyboard_input():
+#	var PID = OS.execute("sudo", [interpreter_path, global_path_to_dir + "/KeyboardInput.py"], false)
+## warning-ignore:return_value_discarded
+#	OS.execute(str(PID), ["INPUT PASSWORD HERE"])
+#	process_pids.append(PID)
 
 
 func kill_processes():

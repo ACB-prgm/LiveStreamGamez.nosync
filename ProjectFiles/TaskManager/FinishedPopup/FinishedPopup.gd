@@ -28,7 +28,7 @@ func _on_Popup_about_to_show():
 	if YoutTubeApi.LiveBroadcastResource:
 		title = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
 		title = title.replace(" ", "_")
-		title += " " + date
+		title += "_" + date
 	else:
 		title = date
 	

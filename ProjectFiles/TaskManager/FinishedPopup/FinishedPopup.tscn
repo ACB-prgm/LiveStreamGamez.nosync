@@ -3,7 +3,7 @@
 [ext_resource path="res://TaskManager/Flat-it - BioSans-Regular.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://TaskManager/FinishedPopup/FinishedPopup.gd" type="Script" id=2]
 
-[sub_resource type="StyleBoxFlat" id=11]
+[sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 20.0
 content_margin_right = 20.0
 content_margin_top = 20.0
@@ -15,7 +15,7 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=2]
 content_margin_left = 20.0
 content_margin_right = 20.0
 bg_color = Color( 0.647059, 0.937255, 0.67451, 1 )
@@ -25,11 +25,11 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=8]
+[sub_resource type="StyleBoxEmpty" id=3]
 
-[sub_resource type="StyleBoxEmpty" id=9]
+[sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="StyleBoxFlat" id=5]
 content_margin_left = 20.0
 content_margin_right = 20.0
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -39,17 +39,17 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=6]
 size = 48
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 1 )
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="StyleBoxEmpty" id=7]
 
-[sub_resource type="StyleBoxEmpty" id=4]
+[sub_resource type="StyleBoxEmpty" id=8]
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=9]
 content_margin_left = 10.0
 content_margin_right = 10.0
 content_margin_top = 10.0
@@ -61,7 +61,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.12549, 0.141176, 0.192157, 1 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=10]
 size = 32
 use_mipmaps = true
 use_filter = true
@@ -84,7 +84,7 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 11 )
+custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -98,11 +98,11 @@ margin_left = -91.5
 margin_top = -108.0
 margin_right = 91.5
 margin_bottom = -40.0
-custom_styles/hover = SubResource( 7 )
-custom_styles/focus = SubResource( 8 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 2 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "ENTER"
 __meta__ = {
@@ -123,7 +123,7 @@ __meta__ = {
 [node name="StreamNameLabel" type="Label" parent="Panel/StreamName"]
 margin_right = 696.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "stream name"
 align = 1
@@ -138,10 +138,10 @@ margin_right = 696.0
 margin_bottom = 124.0
 mouse_filter = 1
 size_flags_horizontal = 3
-custom_styles/read_only = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
-custom_fonts/font = SubResource( 6 )
+custom_styles/read_only = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/selection_color = Color( 0.2, 0.219608, 0.278431, 1 )
 custom_colors/cursor_color = Color( 0.12549, 0.141176, 0.192157, 1 )
 custom_colors/font_color_selected = Color( 1, 1, 1, 1 )
@@ -170,7 +170,7 @@ __meta__ = {
 [node name="Label" type="Label" parent="Panel/StreamDuration"]
 margin_right = 696.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "Input Final Stream Duration"
 align = 1
@@ -194,10 +194,10 @@ margin_right = 116.0
 margin_bottom = 60.0
 mouse_filter = 1
 size_flags_horizontal = 3
-custom_styles/read_only = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
-custom_fonts/font = SubResource( 6 )
+custom_styles/read_only = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/selection_color = Color( 0.2, 0.219608, 0.278431, 1 )
 custom_colors/cursor_color = Color( 0.12549, 0.141176, 0.192157, 1 )
 custom_colors/font_color_selected = Color( 1, 1, 1, 1 )
@@ -213,7 +213,7 @@ __meta__ = {
 margin_left = 120.0
 margin_right = 133.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 6 )
 text = ":"
 align = 1
 valign = 1
@@ -225,10 +225,10 @@ margin_right = 253.0
 margin_bottom = 60.0
 mouse_filter = 1
 size_flags_horizontal = 3
-custom_styles/read_only = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
-custom_fonts/font = SubResource( 6 )
+custom_styles/read_only = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/selection_color = Color( 0.2, 0.219608, 0.278431, 1 )
 custom_colors/cursor_color = Color( 0.12549, 0.141176, 0.192157, 1 )
 custom_colors/font_color_selected = Color( 1, 1, 1, 1 )
@@ -244,7 +244,7 @@ __meta__ = {
 margin_left = 257.0
 margin_right = 270.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 6 )
 text = ":"
 align = 1
 valign = 1
@@ -256,10 +256,10 @@ margin_right = 390.0
 margin_bottom = 60.0
 mouse_filter = 1
 size_flags_horizontal = 3
-custom_styles/read_only = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
-custom_fonts/font = SubResource( 6 )
+custom_styles/read_only = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/selection_color = Color( 0.2, 0.219608, 0.278431, 1 )
 custom_colors/cursor_color = Color( 0.12549, 0.141176, 0.192157, 1 )
 custom_colors/font_color_selected = Color( 1, 1, 1, 1 )
