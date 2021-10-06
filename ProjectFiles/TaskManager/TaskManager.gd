@@ -96,7 +96,7 @@ func _on_task_completed(task_name, start_time_secs, _end_time_secs):
 
 
 func _on_set_final_duration(final_duration, title):
-	var duration_offset = get_seconds_from_time(final_duration) - seconds_elapsed
+	var duration_offset = seconds_elapsed - get_seconds_from_time(final_duration)
 	
 	for chapter in chapters: # modifies to adjust for start time difference
 		if not chapter["name"] == "Intro":
