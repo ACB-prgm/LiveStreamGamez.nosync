@@ -50,7 +50,8 @@ def get_chat(driver):
     while not SUCCESS:
         try:
             chat_url = "{}{}".format(YouTube_BaseURL, chat_src)
-            driver.get(chat_url)
+            if driver.current_url != chat_url:
+                driver.get(chat_url)
             content = driver.page_source.encode("utf-8").strip()
             soup = bs(content, "lxml")
 
