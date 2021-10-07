@@ -44,6 +44,7 @@ func _on_deleteButton_pressed(file_name):
 func refresh_display():
 	for child in filesContainer.get_children():
 		child.queue_free()
+	chaptersDisplay.text = ""
 	
 	stream_files = get_files_in_directory(SAVE_DIR)
 	
@@ -57,7 +58,8 @@ func refresh_display():
 	while !visible:
 		yield(get_tree().create_timer(0.01), "timeout")
 	
-	filesContainer.get_child(0).set_pressed(true)
+	if filesContainer.get_children():
+		filesContainer.get_child(0).set_pressed(true)
 
 
 func _on_confirm_delete_cancelled():

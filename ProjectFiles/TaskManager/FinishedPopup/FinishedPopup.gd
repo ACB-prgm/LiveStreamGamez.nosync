@@ -17,6 +17,8 @@ func _on_EnterButton_pressed():
 	var secs = secInput.text
 	
 	if hrs and mins and secs:
+		title = streamNameLineEdit.text
+		
 		emit_signal("set_final_duration", [int(hrs), int(mins), int(secs)], title)
 		hide()
 
