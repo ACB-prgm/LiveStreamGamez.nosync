@@ -7,7 +7,7 @@ var nextPageToken : String
 var timer := Timer.new()
 var token = null
 
-signal BroadcastID_recieved
+signal BroadcastID_recieved(success)
 
 
 func _ready():
@@ -53,8 +53,9 @@ func _on_http_request_get_LiveBroadcastResource(_result, _response_code, _header
 	if data.get("items") and data.get("items").size() > 0:
 		LiveBroadcastResource = data.get("items")[0]
 		BroadcastID = LiveBroadcastResource.get("id")  ##### ADD CHECKS FOR ERRORS #####
-		emit_signal("BroadcastID_recieved")
+		emit_signal("BroadcastID_recieved", true)
 	else:
+		emit_signal("BroadcastID_recieved", false)
 		print("ERROR : NO ACTIVE STREAM ON CHANNEL")
 	
 	

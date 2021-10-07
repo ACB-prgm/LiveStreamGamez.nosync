@@ -3,6 +3,7 @@ extends VBoxContainer
 
 const ALPHA_VALUE = 0.5
 
+var loadingScreen = preload("res://LoadingScreen/LoadingScreen.tscn")
 var task_TSCN = preload("res://TaskManager/Task/Task.tscn")
 var tween := Tween.new()
 var start_time : int
@@ -26,6 +27,7 @@ func _ready():
 	add_child(tween)
 # warning-ignore:return_value_discarded
 	TaskManagerGlobals.connect("refresh", self, "_on_Refresh")
+	YoutTubeApi.connect("BroadcastID_recieved", self, "_on_YoutTubeApi_BroadcastID_recieved")
 	modulate.a = ALPHA_VALUE
 
 
@@ -48,6 +50,20 @@ func _on_VBoxContainer_mouse_exited():
 
 func _on_StartStopButton_toggled(button_pressed):
 	if button_pressed:
+		make_loading_screen(OAuth2, "token_recieved", "waiting for oath2.0")
+		OAuth2.authorize()
+		yield(OAuth2, "token_recieved")
+		make_loading_screen(YoutTubeApi, "BroadcastID_recieved", "waiting for livestream info")
+	else:
+		TaskManagerGlobals.set_active(false)
+# warning-ignore:integer_division
+		seconds_elapsed = OS.get_ticks_msec()/1000 - start_time
+		if YoutTubeApi.BroadcastID:
+			popup_INS.popup()
+
+
+func _on_YoutTubeApi_BroadcastID_recieved(success):
+	if success:
 		TaskManagerGlobals.set_active(true)
 # warning-ignore:integer_division
 		start_time = OS.get_ticks_msec()/1000
@@ -58,10 +74,7 @@ func _on_StartStopButton_toggled(button_pressed):
 			}
 		]
 	else:
-		TaskManagerGlobals.set_active(false)
-# warning-ignore:integer_division
-		seconds_elapsed = OS.get_ticks_msec()/1000 - start_time
-		popup_INS.popup()
+		$PanelContainer/HBoxContainer/StartStopButton.pressed = false
 
 
 func _on_Refresh():
@@ -135,3 +148,9 @@ func save_data(file_name, data):
 		print("ERROR SAVING FILE : %s" % error)
 
 
+func make_loading_screen(obj, signal_, message):
+	var loading = loadingScreen.instance()
+	loading.kill_obj = obj
+	loading.kill_signal = signal_
+	loading.message = message
+	get_parent().add_child(loading)

@@ -11,11 +11,6 @@ onready var interpreter_path = ProjectSettings.globalize_path("res://venv/bin/py
 signal token_recieved
 
 
-func _ready():
-	yield(get_tree().create_timer(0.1), "timeout")
-	authorize()
-
-
 func authorize():
 	var ERR = OS.execute(interpreter_path, [global_dir_path + "/get_credentials.py"], true)
 	if ERR == OK:

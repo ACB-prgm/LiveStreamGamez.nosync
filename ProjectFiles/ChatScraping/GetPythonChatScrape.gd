@@ -22,11 +22,15 @@ func _notification(what):
 
 func _ready():
 	set_process(false)
-	
-	yield(YoutTubeApi, "BroadcastID_recieved")
-	LiveStream_URL += YoutTubeApi.BroadcastID
-	start_listening()
-	start_scraping()
+	YoutTubeApi.connect("BroadcastID_recieved", self, "_on_YoutTubeApi_BroadcastID_recieved")
+
+
+func _on_YoutTubeApi_BroadcastID_recieved(success):
+	if success:
+		LiveStream_URL += YoutTubeApi.BroadcastID
+		start_listening()
+		start_scraping()
+
 
 
 func _process(_delta):
