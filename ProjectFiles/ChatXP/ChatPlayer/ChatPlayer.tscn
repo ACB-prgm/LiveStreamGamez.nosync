@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://TaskManager/OutlineOnlyStylebox.tres" type="StyleBox" id=1]
+[ext_resource path="res://TaskManager/TMFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://TaskManager/Flat-it - BioSans-Regular.otf" type="DynamicFontData" id=3]
+[ext_resource path="res://ChatXP/ChatPlayer/ChatPlayer.gd" type="Script" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 40
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+
+[sub_resource type="StyleBoxLine" id=3]
+content_margin_top = 0.0
+color = Color( 0.878431, 0.878431, 0.878431, 0 )
+grow_end = 100.0
+
+[node name="PanelContainer" type="PanelContainer"]
+margin_right = 600.0
+margin_bottom = 300.0
+custom_styles/panel = ExtResource( 1 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 580.0
+margin_bottom = 280.0
+custom_constants/separation = 20
+
+[node name="Identifier" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 560.0
+margin_bottom = 50.0
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/Identifier"]
+margin_bottom = 50.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Identifier"]
+margin_left = 4.0
+margin_right = 232.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 1 )
+text = "Player Name"
+valign = 1
+
+[node name="XP" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 70.0
+margin_right = 560.0
+margin_bottom = 110.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="VBoxContainer/XP"]
+margin_right = 36.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 2 )
+text = "L1"
+valign = 1
+uppercase = true
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/XP"]
+margin_left = 46.0
+margin_right = 560.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = ExtResource( 1 )
+percent_visible = false
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 130.0
+margin_right = 3.0
+margin_bottom = 134.0
+size_flags_horizontal = 0
+custom_styles/separator = SubResource( 3 )
+
+[node name="CommentLabel" type="Label" parent="VBoxContainer"]
+margin_top = 154.0
+margin_right = 560.0
+margin_bottom = 237.0
+custom_fonts/font = ExtResource( 2 )
+text = "This is a livechat comment!  Subscribe to ACB_Gamez"
+autowrap = true
+
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]
