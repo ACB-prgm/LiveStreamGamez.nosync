@@ -75,6 +75,13 @@ custom_styles/fg = SubResource( 2 )
 custom_styles/bg = ExtResource( 1 )
 percent_visible = false
 
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/XP/ProgressBar"]
+margin_right = 6.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 130.0
 margin_right = 3.0

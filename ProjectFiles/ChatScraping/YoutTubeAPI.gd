@@ -12,7 +12,6 @@ signal BroadcastID_recieved(success)
 
 
 func _ready():
-	get_time_from_BroadcastDateTime("hi")
 	add_child(timer)
 	timer.set_wait_time(2.0)
 	timer.set_one_shot(true)
