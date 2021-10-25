@@ -3,6 +3,7 @@ extends Node
 
 var BroadcastID : String
 var LiveBroadcastResource : Dictionary
+# https://developers.google.com/youtube/v3/live/docs/liveBroadcasts
 var nextPageToken : String
 var timer := Timer.new()
 var token = null
@@ -11,6 +12,7 @@ signal BroadcastID_recieved(success)
 
 
 func _ready():
+	get_time_from_BroadcastDateTime("hi")
 	add_child(timer)
 	timer.set_wait_time(2.0)
 	timer.set_one_shot(true)
@@ -57,11 +59,10 @@ func _on_http_request_get_LiveBroadcastResource(_result, _response_code, _header
 	else:
 		emit_signal("BroadcastID_recieved", false)
 		print("ERROR : NO ACTIVE STREAM ON CHANNEL")
-	
-	
-	
-#	get_LiveChat_messages()
 
+
+static func get_time_from_BroadcastDateTime(datetime) -> Array:
+	return datetime.split("T")[1].split("+")[0].split(":")
 
 #func get_LiveChat_messages():
 #	var http_request = HTTPRequest.new()

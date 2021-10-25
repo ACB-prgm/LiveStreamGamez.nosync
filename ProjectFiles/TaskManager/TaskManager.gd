@@ -54,6 +54,11 @@ func _on_StartStopButton_toggled(button_pressed):
 		OAuth2.authorize()
 		yield(OAuth2, "token_recieved")
 		make_loading_screen(YoutTubeApi, "BroadcastID_recieved", "waiting for livestream info")
+		yield(YoutTubeApi, "BroadcastID_recieved")
+		
+		if YoutTubeApi.BroadcastID:
+			TaskManagerGlobals.set_active(true)
+			start_time = get_seconds_from_time(YoutTubeApi.get_time_from_BroadcastDateTime(YoutTubeApi.LiveBroadcastResource.get("actualStartTime")))
 	else:
 		TaskManagerGlobals.set_active(false)
 # warning-ignore:integer_division
