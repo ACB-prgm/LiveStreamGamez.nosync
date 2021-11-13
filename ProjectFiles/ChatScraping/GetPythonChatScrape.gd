@@ -12,6 +12,8 @@ var LiveStream_URL := "https://www.youtube.com/watch?v="
 onready var global_path_to_dir = ProjectSettings.globalize_path("res://ChatScraping")
 onready var interpreter_path = ProjectSettings.globalize_path("res://venv/bin/python")
 
+signal chat_packet_recieved(chat_packet)
+
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
@@ -48,7 +50,7 @@ func _process(_delta):
 				"PIDs":
 					process_pids.append_array(packet)
 				"CHAT":
-					print(packet)
+					emit_signal("chat_packet_recieved", packet)
 				"KEY_INPUT":
 					print(packet)
 		else:

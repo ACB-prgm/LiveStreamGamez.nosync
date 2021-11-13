@@ -8,18 +8,13 @@ onready var minInput = $Panel/StreamDuration/HBoxContainer/MinutesInput
 onready var secInput = $Panel/StreamDuration/HBoxContainer/SecondsInput
 onready var streamNameLineEdit = $Panel/StreamName/StreamNameLineEdit
 
-signal set_final_duration(final_duration, title)
+signal set_final_duration(title)
 
 
 func _on_EnterButton_pressed():
-	var hrs = hourInput.text
-	var mins = minInput.text
-	var secs = secInput.text
-	
-	if hrs and mins and secs:
 		title = streamNameLineEdit.text
 		
-		emit_signal("set_final_duration", [int(hrs), int(mins), int(secs)], title)
+		emit_signal("set_final_duration", title)
 		hide()
 
 

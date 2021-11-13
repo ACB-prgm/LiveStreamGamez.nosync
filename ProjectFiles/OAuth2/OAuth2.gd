@@ -12,6 +12,7 @@ signal token_recieved
 
 
 func authorize():
+	yield(get_tree().create_timer(0.1), "timeout")
 	var ERR = OS.execute(interpreter_path, [global_dir_path + "/get_credentials.py"], true)
 	if ERR == OK:
 		get_token_from_JSON()

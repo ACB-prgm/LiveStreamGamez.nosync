@@ -6,9 +6,9 @@
 [ext_resource path="res://TaskManager/Task/Task.gd" type="Script" id=4]
 [ext_resource path="res://TaskManager/OutlineOnlyStylebox.tres" type="StyleBox" id=5]
 
-[sub_resource type="StyleBoxEmpty" id=7]
+[sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=2]
 content_margin_left = 10.0
 content_margin_right = 10.0
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -18,11 +18,11 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 
+[sub_resource type="StyleBoxEmpty" id=3]
+
 [sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="StyleBoxEmpty" id=5]
-
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=5]
 size = 18
 outline_color = Color( 0.25098, 0.25098, 0.266667, 1 )
 use_mipmaps = true
@@ -44,7 +44,7 @@ __meta__ = {
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 319.0
-margin_bottom = 130.0
+margin_bottom = 91.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
@@ -70,11 +70,11 @@ margin_bottom = 44.0
 mouse_filter = 1
 size_flags_horizontal = 4
 size_flags_vertical = 4
-custom_styles/hover = SubResource( 7 )
-custom_styles/pressed = SubResource( 3 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/disabled = SubResource( 5 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 2 )
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 toggle_mode = true
@@ -98,7 +98,7 @@ __meta__ = {
 margin_top = 48.0
 margin_right = 299.0
 margin_bottom = 71.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "00:00:00 - 00:00:00"
 uppercase = true
 

@@ -54,7 +54,7 @@ func reset_loading_img():
 		loading_img.append(SHORT_LINE)
 
 
-func die():
+func die(_candie):
 	queue_free()
 
 

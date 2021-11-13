@@ -61,7 +61,11 @@ func _on_http_request_get_LiveBroadcastResource(_result, _response_code, _header
 
 
 static func get_time_from_BroadcastDateTime(datetime) -> Array:
-	return datetime.split("T")[1].split("+")[0].split(":")
+	# YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00)
+	datetime = datetime.split("T")[1].split("+")[0].split(":")
+	datetime[2] = datetime[2].replace("Z", "") # sometimes literal Z left at end idk
+	return datetime
+
 
 #func get_LiveChat_messages():
 #	var http_request = HTTPRequest.new()

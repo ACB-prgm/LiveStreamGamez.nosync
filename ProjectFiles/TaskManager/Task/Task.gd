@@ -22,20 +22,20 @@ func _ready():
 
 func _on_StartStopButton_started():
 # warning-ignore:integer_division
-	start_time_sec = OS.get_ticks_msec()/1000 - stream_start_time
+	start_time_sec = TaskManagerGlobals.get_current_time_sec() - stream_start_time
 	start_time_str = "%s:%s:%s" % get_time_from_secs(start_time_sec)
 
 
 func _on_StartStopButton_completed():
 # warning-ignore:integer_division
-	emit_signal("task_completed", task, start_time_sec, OS.get_ticks_msec()/1000)
+	emit_signal("task_completed", task, start_time_sec, TaskManagerGlobals.get_current_time_sec())
 	completed = true
 
 
 func _on_Refresh():
 	if start_time_sec and not completed:
 # warning-ignore:integer_division
-		var seconds_elapsed := OS.get_ticks_msec()/1000 - stream_start_time
+		var seconds_elapsed = TaskManagerGlobals.get_current_time_sec() - stream_start_time
 		time_label.set_text(start_time_str + " — %s:%s:%s" % get_time_from_secs(seconds_elapsed))
 
 
