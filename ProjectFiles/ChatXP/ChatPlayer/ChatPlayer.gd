@@ -7,70 +7,69 @@ onready var icon = $VBoxContainer/Identifier/Icon
 onready var levelLabel = $VBoxContainer/Identifier/LevelLabel
 onready var xp_bar = $VBoxContainer/Identifier/ProgressBar
 onready var commentLabel = $VBoxContainer/CommentLabel
-onready var glow_bar = $VBoxContainer/Identifier/ProgressBar/ColorRect
+onready var timer = $Timer
 
-var player_info = {
-	"user" : "Default",
-	"icon" : null,
-	"xp" : 0,
-	"last_stream" : "",
-	"num_comments" : 0
-}
-var XP_to_give := 0
-var comment := "Subscribe to ACB_Gamez"
+var level_particles_TSCN = preload("res://ChatXP/LevelUpParticles2D.tscn")
+var anim_info = {}
 
 signal player_fading
 
 
 func _ready():
-	nameLabel.text = player_info["user"]
-	commentLabel.text = comment
+	randomize()
+	nameLabel.text = anim_info.get("user")
+	commentLabel.text = anim_info.get("comment")
+	levelLabel.text = "Lv " + str(anim_info.get("level"))
 	
-	if player_info["icon"]:
-		icon.texture = player_info["icon"]
-	
-	var player_xp = player_info["xp"] - XP_to_give
-	var player_level = int(player_xp / 300)
-	player_level = clamp(player_level, 1, 50)
-	levelLabel.text = "Lv " + str(player_level)
-	
-	give_xp(player_xp, player_level, XP_to_give)
+	if anim_info.get("icon"):
+		icon.texture = anim_info.get("icon")
 	
 	set_physics_process(false)
-	glow_bar.modulate.a = 0
 	
 	# transition in tween
 	modulate.a = 0
-#	yield(get_tree().create_timer(0.1), "timeout")
 	tween.interpolate_property(self, "rect_position", 
 	rect_position + Vector2(rect_size.x * 1.5, 0), rect_position, .5, 
 	Tween.TRANS_CIRC, Tween.EASE_OUT)
 	tween.interpolate_property(self, "modulate:a", 0, 1, .25, 
 	Tween.TRANS_CIRC, Tween.EASE_OUT)
 	tween.start()
-
-
-func _physics_process(_delta):
-	var xp_pos = xp_bar.rect_global_position
-	var offset = xp_bar.rect_size.x * xp_bar.value/100.0 - glow_bar.rect_size.x/4
-	glow_bar.rect_global_position = xp_pos + Vector2(offset, 0)
-
-
-func give_xp(player_xp, player_level, xp):
-	var level_xp = TaskManagerGlobals.LEVEL_INFO.get(clamp(player_level + 1, 1, 50)) - TaskManagerGlobals.LEVEL_INFO.get(player_level)
-	var current_lv_xp = TaskManagerGlobals.LEVEL_INFO.get(player_level) - player_xp
 	
-	set_physics_process(true)
-	tween.interpolate_property(xp_bar, "value", xp_bar.value, xp, 1, 
-	Tween.TRANS_CIRC, Tween.EASE_OUT)
-	tween.start()
-	glow_bar.modulate.a = 2
+	xp_bar.value = anim_info.get("level_xp") / TaskManagerGlobals.LEVEL_INFO.get(anim_info.get("level")) * 100
+	yield(tween, "tween_all_completed")
+	give_xp()
+
+
+func give_xp():
+	if anim_info.get("level_up"):
+		tween.interpolate_property(xp_bar, "value", xp_bar.value, 100, 
+		.6, Tween.TRANS_CIRC, Tween.EASE_OUT)
+		tween.start()
+		yield(tween, "tween_all_completed")
+		xp_bar.value = 0
+		spawn_lvl_particles()
+		anim_info["level"] += 1
+		levelLabel.text = "lv" + str(anim_info.get("level"))
 	
-	yield(tween, "tween_completed")
-	set_physics_process(false)
-	tween.interpolate_property(glow_bar, "modulate:a", glow_bar.modulate.a, 0, .5, 
-	Tween.TRANS_CIRC, Tween.EASE_OUT)
+	var xp_gain = anim_info.get("xp_gain") / TaskManagerGlobals.LEVEL_INFO.get(anim_info.get("level")) * 100
+	
+	tween.interpolate_property(xp_bar, "value", xp_bar.value, xp_gain, 
+	1, Tween.TRANS_CIRC, Tween.EASE_OUT)
 	tween.start()
+	
+	yield(tween, "tween_all_completed")
+	timer.start()
+	
+	
+
+func spawn_lvl_particles():
+	for _i in range(3):
+		var particles_INS = level_particles_TSCN.instance()
+		levelLabel.add_child(particles_INS)
+		particles_INS.global_position += levelLabel.rect_size * rand_range(-.25, 1)
+		var rand = rand_range(.25, 1)
+		particles_INS.scale = Vector2(rand, rand)
+		yield(get_tree().create_timer(0.2), "timeout")
 
 
 func _on_Timer_timeout():

@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ChatXP/LevelUpParticles2D.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.692029, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+max_value = 200.0
+_data = [ Vector2( 0, 200 ), 0.0, 0.0, 0, 0, Vector2( 0.376543, 200 ), 0.0, 0.0, 0, 0, Vector2( 0.533951, 6.3063 ), -965.171, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+_data = [ Vector2( 0.00617284, 0.612613 ), 0.0, 0.0, 0, 0, Vector2( 0.234568, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.996914, 0.824324 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 1.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 200, 0 )
+initial_velocity = 200.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping_curve = SubResource( 4 )
+scale = 17.5
+scale_random = 0.5
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 2 )
+hue_variation = -1.0
+hue_variation_random = 1.0
+
+[node name="Particles2D_Plus" type="Particles2D"]
+amount = 20
+explosiveness = 0.8
+process_material = SubResource( 7 )
+script = ExtResource( 1 )
+one_shot_start = true
+
+[connection signal="particles_cycle_finished" from="." to="." method="_on_Particles2D_Plus_particles_cycle_finished"]

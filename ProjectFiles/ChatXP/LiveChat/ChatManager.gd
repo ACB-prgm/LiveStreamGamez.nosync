@@ -4,6 +4,7 @@ extends PanelContainer
 const ALPHA_VALUE = 0.5
 const BASE_XP_GAIN = 100
 
+var current_stream = ""
 var playerTSCN = preload("res://ChatXP/ChatPlayer/ChatPlayer.tscn")
 var ChatPlayerData = {
 	"user" : {}
@@ -11,7 +12,8 @@ var ChatPlayerData = {
 var default_player_info = {
 	"user" : "Default",
 	"icon" : null,
-	"xp" : 0,
+	"level": 1,
+	"level_xp" : 0,
 	"last_stream" : "",
 	"num_comments" : 0
 }
@@ -30,7 +32,7 @@ func _ready():
 	GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
 	
 	# TESTING
-#	_on_chat_packet_recieved([["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"]])
+#	_on_chat_packet_recieved([["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["Joe", "level up!"]])
 
 
 func _on_chat_packet_recieved(chat:Array):
@@ -51,26 +53,40 @@ func _on_chat_packet_recieved(chat:Array):
 		if info["last_stream"] == current_stream:
 			info["num_comments"] += 1
 		else:
-			info["last_stream"] == current_stream
+			info["last_stream"] = current_stream
 		
-		var multiplier = BASE_XP_GAIN * info.get("num_comments") * 0.25
-		multiplier = clamp(multiplier, 0, 200)
-		var xp_gain = BASE_XP_GAIN + multiplier
-		info["xp"] += xp_gain
+		var anim_info = {
+			"user" : user,
+			"comment" : comment,
+			"icon" : info.get("icon"),
+			"level" : info.get("level"),
+			"level_xp" : info.get("level_xp"),
+			"xp_gain" : 0,
+			"level_up" : false
+		}
+		var bonus_xp = clamp(BASE_XP_GAIN * (info.get("num_comments")-1) * 0.25, 0, 300)
+		var xp_gain = BASE_XP_GAIN + bonus_xp
+		# CHECK IF LEVEL UP
+		prints(user, xp_gain + info.get("level_xp"))
+		if xp_gain + info.get("level_xp") > TaskManagerGlobals.LEVEL_INFO.get(info.get("level")):
+			info["level_xp"] = xp_gain
+			xp_gain = TaskManagerGlobals.LEVEL_INFO.get(info.get("level")) - (info.get("level_xp") + xp_gain)
+			info["level"] += 1
+			anim_info["level_up"] = true
+		else:
+			info["level_xp"] += xp_gain
 		
+		anim_info["xp_gain"] = info.get("level_xp")
 		ChatPlayerData[user] = info
-		print(info)
-		spawn_chatPlayer(info, comment, xp_gain)
+		spawn_chatPlayer(anim_info)
 		chat_timer.start()
 		yield(chat_timer, "timeout")
 
 
-func spawn_chatPlayer(info, comment, xp_gain):
+func spawn_chatPlayer(anim_info):
 	var playerINS = playerTSCN.instance()
 	
-	playerINS.player_info = info
-	playerINS.comment = comment
-	playerINS.XP_to_give = xp_gain
+	playerINS.anim_info = anim_info
 	
 	playerINS.connect("player_fading", self, "_on_player_fading")
 	chatBox.add_child(playerINS)
