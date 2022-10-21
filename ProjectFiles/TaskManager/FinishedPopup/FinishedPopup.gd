@@ -3,9 +3,9 @@ extends Popup
 
 var title := ""
 
-onready var hourInput = $Panel/StreamDuration/HBoxContainer/HourInput
-onready var minInput = $Panel/StreamDuration/HBoxContainer/MinutesInput
-onready var secInput = $Panel/StreamDuration/HBoxContainer/SecondsInput
+#onready var hourInput = $Panel/StreamDuration/HBoxContainer/HourInput
+#onready var minInput = $Panel/StreamDuration/HBoxContainer/MinutesInput
+#onready var secInput = $Panel/StreamDuration/HBoxContainer/SecondsInput
 onready var streamNameLineEdit = $Panel/StreamName/StreamNameLineEdit
 
 signal set_final_duration(title)

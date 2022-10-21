@@ -3,7 +3,6 @@ extends Popup
 
 const SAVE_DIR := 'user://LiveStreamChapters/'
 
-var outlineStylebox = preload("res://TaskManager/OutlineOnlyStylebox.tres")
 var button_TSCN = preload("res://TaskManager/ChapterSelector/FileButton.tscn")
 var stream_files : Array
 

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://OAuth2_Test/OAuth2_Test.gd" type="Script" id=1]
+
+[node name="OAuth2" type="Node2D"]
+modulate = Color( 0.878431, 0.878431, 0.878431, 1 )
+script = ExtResource( 1 )

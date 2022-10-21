@@ -4,13 +4,12 @@ const UDP_IP = "127.0.0.1"
 const UDP_PORT = 4243
 
 var server := UDPServer.new()
-var ip_address : String
 var is_broadcasting := false
 var process_pids := []
 var LiveStream_URL := "https://www.youtube.com/watch?v="
 
-onready var global_path_to_dir = ProjectSettings.globalize_path("res://ChatScraping")
-onready var interpreter_path = ProjectSettings.globalize_path("res://venv/bin/python")
+onready var YouTubeScrape_py = ProjectSettings.globalize_path("user://YouTubeScrape.py")
+onready var interpreter_path = ProjectSettings.globalize_path("user://venv/bin/python")
 
 signal chat_packet_recieved(chat_packet)
 
@@ -32,7 +31,6 @@ func _on_YoutTubeApi_BroadcastID_recieved(success):
 		LiveStream_URL += YoutTubeApi.BroadcastID
 		start_listening()
 		start_scraping()
-
 
 
 func _process(_delta):
@@ -73,7 +71,7 @@ func stop_listening():
 
 
 func start_scraping():
-	var PID = OS.execute(interpreter_path, [global_path_to_dir + "/YouTubeScrape.py", LiveStream_URL], false)
+	var PID = OS.execute(interpreter_path, [YouTubeScrape_py, LiveStream_URL], false)
 	process_pids.append(float(PID))
 
 

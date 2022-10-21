@@ -4,7 +4,6 @@ extends Node
 var BroadcastID : String
 var LiveBroadcastResource : Dictionary
 # https://developers.google.com/youtube/v3/live/docs/liveBroadcasts
-var nextPageToken : String
 var timer := Timer.new()
 var token = null
 

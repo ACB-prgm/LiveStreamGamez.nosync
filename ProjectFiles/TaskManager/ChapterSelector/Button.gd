@@ -2,7 +2,6 @@ extends HBoxContainer
 
 
 onready var fileButton = $Button
-onready var deleteButton = $DeleteButton
 
 var text := ""
 

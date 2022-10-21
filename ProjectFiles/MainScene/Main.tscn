@@ -17,6 +17,10 @@ border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
@@ -46,6 +50,7 @@ margin_bottom = 877.25
 rect_scale = Vector2( 1.5, 1.5 )
 
 [node name="ChaptersSelectPopup" parent="." instance=ExtResource( 4 )]
+visible = false
 
 [node name="ChaptersButton" type="Button" parent="."]
 anchor_left = 1.0
@@ -66,6 +71,10 @@ __meta__ = {
 }
 
 [node name="ChatManagerControl" parent="." instance=ExtResource( 5 )]
+margin_left = 2.0
+margin_top = -1.0
+margin_right = 2.0
+margin_bottom = -1.0
 mouse_filter = 2
 
 [connection signal="mouse_entered" from="ChaptersButton" to="." method="_on_ChaptersButton_mouse_entered"]

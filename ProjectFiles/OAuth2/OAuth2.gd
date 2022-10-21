@@ -7,7 +7,6 @@ var token : String
 
 onready var global_dir_path = ProjectSettings.globalize_path("res://OAuth2")
 onready var interpreter_path = ProjectSettings.globalize_path("res://venv/bin/python")
-
 signal token_recieved
 
 

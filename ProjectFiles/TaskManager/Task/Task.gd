@@ -4,7 +4,6 @@ extends PanelContainer
 var task : String = "TASK NAME"
 var start_time_str : String
 var start_time_sec : int
-var end_time_secs : int
 var stream_start_time : int = 0
 var completed : bool = false
 

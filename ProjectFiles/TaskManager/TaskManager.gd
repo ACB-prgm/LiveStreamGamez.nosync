@@ -9,11 +9,6 @@ var tween := Tween.new()
 var start_time : int
 var seconds_elapsed : int
 var chapters := []
-var time_passed := {
-	"hours" : 0,
-	"minutes" : 0,
-	"seconds" : 0,
-}
 
 onready var popup_INS = preload("res://TaskManager/FinishedPopup/FinishedPopup.tscn").instance()
 onready var streamTimeLabel = $PanelContainer/HBoxContainer/StreamTimeLabel

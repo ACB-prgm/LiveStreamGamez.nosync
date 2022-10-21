@@ -39,7 +39,7 @@ func _on_chat_packet_recieved(chat:Array):
 	modulate.a = 1
 	
 	for comment in chat:
-		var current_stream = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
+		current_stream = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
 		var user = comment[0]
 		comment = comment[1]
 		

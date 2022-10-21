@@ -17,6 +17,10 @@ border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id=2]
 content_margin_left = 10.0
@@ -27,6 +31,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
@@ -45,6 +53,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.12549, 0.141176, 0.192157, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id=7]
 content_margin_left = 10.0
@@ -55,6 +67,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id=8]
 content_margin_left = 10.0
@@ -65,6 +81,10 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="DynamicFont" id=9]
 size = 32
@@ -201,11 +221,11 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="PanelContainer2/TaskCreator"]
 
-[connection signal="mouse_entered" from="." to="." method="_on_VBoxContainer_mouse_entered"]
 [connection signal="mouse_entered" from="." to="PanelContainer2/TaskCreator" method="_on_VBoxContainer_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_VBoxContainer_mouse_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_VBoxContainer_mouse_entered"]
 [connection signal="mouse_exited" from="." to="PanelContainer2/TaskCreator" method="_on_VBoxContainer_mouse_exited"]
-[connection signal="toggled" from="PanelContainer/HBoxContainer/StartStopButton" to="." method="_on_StartStopButton_toggled"]
+[connection signal="mouse_exited" from="." to="." method="_on_VBoxContainer_mouse_exited"]
 [connection signal="toggled" from="PanelContainer/HBoxContainer/StartStopButton" to="PanelContainer/HBoxContainer/StartStopButton" method="_on_StartStopButton_toggled"]
+[connection signal="toggled" from="PanelContainer/HBoxContainer/StartStopButton" to="." method="_on_StartStopButton_toggled"]
 [connection signal="task_created" from="PanelContainer2/TaskCreator" to="." method="_on_TaskCreator_task_created"]
 [connection signal="pressed" from="PanelContainer2/TaskCreator/Button" to="PanelContainer2/TaskCreator" method="_on_Button_pressed"]

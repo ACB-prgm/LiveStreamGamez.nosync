@@ -29,20 +29,20 @@ config/icon="res://Icon.png"
 [autoload]
 
 GetPythonChatScrape="*res://ChatScraping/GetPythonChatScrape.gd"
-OAuth2="*res://OAuth2/OAuth2.gd"
 YoutTubeApi="*res://ChatScraping/YoutTubeAPI.gd"
 TaskManagerGlobals="*res://TaskManager/TaskManagerGlobals.gd"
+OAuth2="*res://OAuth2_Test/OAuth2_Test.gd"
 
 [debug]
 
 gdscript/completion/autocomplete_setters_and_getters=true
+gdscript/warnings/unused_class_variable=true
 
 [display]
 
 window/size/width=3840
 window/size/height=2160
-window/size/test_width=1920
-window/size/test_height=1080
+window/dpi/allow_hidpi=true
 window/per_pixel_transparency/allowed=true
 window/per_pixel_transparency/enabled=true
 window/stretch/mode="2d"
