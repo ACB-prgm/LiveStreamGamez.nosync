@@ -50,7 +50,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/SetEditorSettings_Plugin/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/GitProjectData/plugin.cfg", "res://addons/SetEditorSettings_Plugin/plugin.cfg" )
 
 [gdnative]
 
