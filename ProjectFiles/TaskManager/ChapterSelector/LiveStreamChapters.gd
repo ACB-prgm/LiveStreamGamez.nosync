@@ -20,7 +20,7 @@ func _on_Popup_about_to_show():
 	refresh_display()
 
 
-func _on_fileButton_pressed(file_name):
+func _on_fileButton_pressed(file_name=null):
 	var chapters_text = ""
 	
 	if file_name:
@@ -29,8 +29,10 @@ func _on_fileButton_pressed(file_name):
 				file.set_pressed(false)
 		
 		var path = SAVE_DIR + file_name
-		for chapter in load_file(path):
-			chapters_text += "%s %s\n" % [get_timestring_from_secs(chapter["start_time"]), chapter["name"]]
+		var data = load_file(path)
+		if data:
+			for chapter in load_file(path):
+				chapters_text += "%s %s\n" % [get_timestring_from_secs(chapter["start_time"]), chapter["name"]]
 	
 	chaptersDisplay.text = chapters_text
 
@@ -75,7 +77,11 @@ func _on_confirm_delete():
 
 func get_files_in_directory(path):
 	var files = []
-	var dir = Directory.new()
+	var dir := Directory.new()
+	
+	if !dir.dir_exists(path):
+		return files
+	
 	dir.open(path)
 	dir.list_dir_begin()
 
@@ -100,7 +106,7 @@ func load_file(save_path):
 			data = file.get_var()
 			file.close()
 		else:
-			print("ERROR LOADING FILE : %s" % error)
+			push_error("ERROR LOADING FILE : %s" % error)
 	return data
 
 
