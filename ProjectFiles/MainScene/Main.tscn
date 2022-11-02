@@ -71,10 +71,14 @@ __meta__ = {
 }
 
 [node name="ChatManagerControl" parent="." instance=ExtResource( 5 )]
-margin_left = 2.0
-margin_top = -1.0
-margin_right = 2.0
-margin_bottom = -1.0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1452.0
+margin_top = -352.0
+margin_right = -52.0
+margin_bottom = -52.0
 mouse_filter = 2
 
 [connection signal="mouse_entered" from="ChaptersButton" to="." method="_on_ChaptersButton_mouse_entered"]

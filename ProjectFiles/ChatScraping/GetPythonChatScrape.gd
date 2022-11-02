@@ -13,6 +13,8 @@ onready var interpreter_path = ProjectSettings.globalize_path("user://venv/bin/p
 
 signal chat_packet_recieved(chat_packet)
 
+# The chat packets are cleaned by the python script and only
+# new chat messages are given to godot
 
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
