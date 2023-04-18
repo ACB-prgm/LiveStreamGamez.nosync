@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "FlaskAPI",
+"language": "GDScript",
+"path": "res://ChatXP/FlaskAPI/FlaskAPI.gd"
+}, {
 "base": "Particles2D",
 "class": "Particles2D_Plus",
 "language": "GDScript",
 "path": "res://Particles2D+.gd"
 } ]
 _global_script_class_icons={
+"FlaskAPI": "",
 "Particles2D_Plus": "res://GPUParticles2D_Icon.svg"
 }
 

@@ -25,8 +25,14 @@ func _ready():
 		icon.texture = anim_info.get("icon")
 	
 	set_physics_process(false)
+	transition_in()
 	
-	# transition in tween
+	xp_bar.value = anim_info.get("bar_start_val")
+	yield(tween, "tween_all_completed")
+	give_xp()
+
+
+func transition_in() -> void:
 	modulate.a = 0
 	tween.interpolate_property(self, "rect_position", 
 	rect_position + Vector2(rect_size.x * 1.5, 0), rect_position, .5, 
@@ -34,15 +40,11 @@ func _ready():
 	tween.interpolate_property(self, "modulate:a", 0, 1, .25, 
 	Tween.TRANS_CIRC, Tween.EASE_OUT)
 	tween.start()
-	
-	xp_bar.value = anim_info.get("level_xp") / TaskManagerGlobals.LEVEL_INFO.get(anim_info.get("level")) * 100
-	yield(tween, "tween_all_completed")
-	give_xp()
 
 
 func give_xp():
 	if anim_info.get("level_up"):
-		tween.interpolate_property(xp_bar, "value", xp_bar.value, 100, 
+		tween.interpolate_property(xp_bar, "value", null, 100, 
 		.6, Tween.TRANS_CIRC, Tween.EASE_OUT)
 		tween.start()
 		yield(tween, "tween_all_completed")

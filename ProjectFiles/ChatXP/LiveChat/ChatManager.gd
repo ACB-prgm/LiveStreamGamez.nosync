@@ -6,16 +6,27 @@ const BASE_XP_GAIN = 100
 
 var current_stream = ""
 var playerTSCN = preload("res://ChatXP/ChatPlayer/ChatPlayer.tscn")
-var ChatPlayerData = {
-	"user" : {}
-}
+#var default_player_info = {
+#	"icon" : null,
+#	"level": 1,
+#	"level_xp" : 0,
+#	"last_stream" : "",
+#	"num_comments" : 0
+#}
 var default_player_info = {
-	"user" : "Default",
-	"icon" : null,
-	"level": 1,
-	"level_xp" : 0,
-	"last_stream" : "",
-	"num_comments" : 0
+	"progression" : {
+		"level": 1,
+		"level_xp" : 0,
+		"last_stream" : "",
+		"total_num_comments" : 0, # num lifetime comments
+		"current_num_comments" : 0 # num comments on current stream
+	},
+	"appearance" : {
+		"icon" : null
+	}
+}
+var ChatPlayerData = {
+	"user" : {} # default_player_info
 }
 
 onready var chatBox = $VBoxContainer/ScrollContainer/ChatVBoxContainer
@@ -32,12 +43,13 @@ func _ready():
 	GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
 	
 	# TESTING
-#	_on_chat_packet_recieved([["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["Joe", "level up!"]])
+#	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"] ])
 
 
 func _on_chat_packet_recieved(chat:Array):
 	modulate.a = 1
 	current_stream = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
+#	current_stream = "test"
 	
 	for comment in chat:
 		var user = comment[0]
@@ -48,42 +60,60 @@ func _on_chat_packet_recieved(chat:Array):
 			info = ChatPlayerData[user]
 		else:
 			info = default_player_info.duplicate()
-			info["user"] = user
 		
-		if info["last_stream"] == current_stream:
-			info["num_comments"] += 1
+		# UPDATE USER PROGRESSION ————————————————
+		var progression_info = info["progression"]
+		# Update comment stats
+		if progression_info["last_stream"] == current_stream:
+			progression_info["current_num_comments"] += 1
 		else:
-			info["last_stream"] = current_stream
+			progression_info["last_stream"] = current_stream
+			progression_info["current_num_comments"] = 1
+		progression_info["total_num_comments"] += 1
 		
-		var anim_info = {
-			"user" : user,
-			"comment" : comment,
-			"icon" : info.get("icon"),
-			"level" : info.get("level"),
-			"level_xp" : info.get("level_xp"),
-			"xp_gain" : 0,
-			"level_up" : false
-		}
-		var bonus_xp = clamp(BASE_XP_GAIN * (info.get("num_comments")-1) * 0.25, 0, 300)
+		# Update XP
+		var bonus_xp = clamp(BASE_XP_GAIN * (progression_info.get("current_num_comments")-1) * 0.25, 0, 300) # reward participation
 		var xp_gain = BASE_XP_GAIN + bonus_xp
-		# CHECK IF LEVEL UP
-		prints(user, xp_gain + info.get("level_xp"))
-		if xp_gain + info.get("level_xp") > TaskManagerGlobals.LEVEL_INFO.get(info.get("level")):
-			info["level_xp"] = xp_gain
-			xp_gain = TaskManagerGlobals.LEVEL_INFO.get(info.get("level")) - (info.get("level_xp") + xp_gain)
-			info["level"] += 1
-			anim_info["level_up"] = true
-		else:
-			info["level_xp"] += xp_gain
+		var level_up = false
+		var level_up_threshold = TaskManagerGlobals.LEVEL_INFO.get(progression_info.get("level"))
+		var previous_level_xp = progression_info.get("level_xp")
+		var theoretical_level_xp = previous_level_xp + xp_gain
 		
-		anim_info["xp_gain"] = info.get("level_xp")
+		if  theoretical_level_xp > level_up_threshold: # level up!
+			level_up = true
+			xp_gain = theoretical_level_xp - level_up_threshold
+			progression_info["level_xp"] = xp_gain
+			progression_info["level"] += 1
+		else:
+			progression_info["level_xp"] = theoretical_level_xp
+		
 		ChatPlayerData[user] = info
-		spawn_chatPlayer(anim_info)
+		
+		# DISPLAY CHAT AND UPDATES
+		spawn_chatPlayer(user, comment, info, previous_level_xp, xp_gain, level_up)
 		chat_timer.start()
 		yield(chat_timer, "timeout")
 
 
-func spawn_chatPlayer(anim_info):
+func spawn_chatPlayer(user, comment, info, previous_xp, xp_gain, level_up):
+	var bar_start_val = previous_xp
+	var start_level = info["progression"].get("level")
+	if level_up:
+		start_level -= 1
+	bar_start_val = bar_start_val / TaskManagerGlobals.LEVEL_INFO.get(start_level) * 100
+	print(bar_start_val)
+	
+	var anim_info = {
+			"user" : user,
+			"comment" : comment,
+			"icon" : info["appearance"].get("icon"),
+			"level" : start_level,
+			"level_xp" : info["progression"].get("level_xp"),
+			"bar_start_val" : bar_start_val,
+			"xp_gain" : xp_gain,
+			"level_up" : level_up
+		}
+	
 	var playerINS = playerTSCN.instance()
 	
 	playerINS.anim_info = anim_info
