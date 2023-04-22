@@ -4,6 +4,7 @@ extends PanelContainer
 const SAVE_DIR = 'user://ChatPlayers/'
 const ALPHA_VALUE = 0.5
 const BASE_XP_GAIN = 100
+const LOG_HIST = 10
 
 var current_stream = ""
 var playerTSCN = preload("res://ChatXP/ChatPlayer/ChatPlayer.tscn")
@@ -31,8 +32,8 @@ func _ready() -> void:
 	var data = yield(FlaskAPI.get_all_users_info(), "completed")
 	if data:
 		ChatPlayerData = data
+		log_info(data)
 	var _err = GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
-	
 	# TESTING
 	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["ACB_Gamez", "test"]])
 
@@ -123,8 +124,47 @@ func _on_player_fading() -> void:
 		tween.start()
 
 # SAVE/LOAD FUNCTIONS ——————————————————————————————————————————————————————————
-func save_data() -> void:
-	var save_path = SAVE_DIR + "Players" + ".dat"
+func log_info(info:Dictionary):
+	var dir = Directory.new()
+	var save_dir = SAVE_DIR.plus_file("logs/")
+	if !dir.dir_exists(save_dir):
+		dir.make_dir(save_dir)
+	
+	var file_name = Time.get_datetime_string_from_system().replace(":", "_") + ".dat"
+	
+	var logs = list_logs(save_dir)
+	if len(logs) >= 10:
+		var path = ProjectSettings.globalize_path(save_dir.plus_file(logs[0]))
+		var err = dir.remove(path)
+		if err != OK:
+			print("ERROR REMOVING FILE %s WITH ERR CODE:%s" % [logs[0], err])
+		
+	save_data(info, file_name, save_dir)
+
+
+func list_logs(dir_path: String) -> Array:
+	var file_list := []
+	var dir := Directory.new()
+	var error := dir.open(dir_path)
+	if error != OK:
+		print("Error opening directory:", dir_path)
+		return file_list
+	var _err = dir.list_dir_begin()
+	while true:
+		var file := dir.get_next()
+		if file == "":
+			break
+		elif not ".dat" in file:
+			continue
+		file_list.append(file)
+	dir.list_dir_end()
+	
+	file_list.sort()
+	return file_list
+
+
+func save_data(info:=ChatPlayerData, file_name:="Players.dat", save_dir:=SAVE_DIR) -> void:
+	var save_path = save_dir + file_name
 	var dir = Directory.new()
 	if !dir.dir_exists(SAVE_DIR):
 		dir.make_dir_recursive(SAVE_DIR)
@@ -132,13 +172,13 @@ func save_data() -> void:
 	var file = File.new()
 	var error = file.open(save_path, File.WRITE)
 	if error == OK:
-		file.store_var(ChatPlayerData)
+		file.store_var(info)
 		file.close()
 	else:
 		print("ERROR SAVING FILE : %s" % error)
 
-func load_player_data() -> Dictionary:
-	var save_path = SAVE_DIR + "Players" + ".dat"
+func load_player_data(file_name:="Players.dat") -> Dictionary:
+	var save_path = SAVE_DIR + file_name
 	var data = null
 	var file = File.new()
 	if file.file_exists(save_path):
@@ -155,18 +195,3 @@ func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 		save_data()
 		get_tree().quit() # default behavior
-
-
-#func merge_changes() -> void:
-#	# Update local appearance data with aws data and aws progression data with 
-#	# local progression data.
-#
-#	var user_data = yield(FlaskAPI.get_all_users_info(), "completed")
-#	for user in user_data: # update aws progression data with local data
-#		if user in ChatPlayerData:
-#			user_data[user]["progression"] = ChatPlayerData[user]["progression"]
-#		else:
-#			ChatPlayerData[user] = user_data[user]
-#	ChatPlayerData = user_data # update local appearance data with aws data
-#
-#	FlaskAPI.update_all_users_info(user_data)
