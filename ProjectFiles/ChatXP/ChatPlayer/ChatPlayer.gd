@@ -55,7 +55,7 @@ func give_xp():
 	
 	var xp_gain = anim_info.get("xp_gain") / TaskManagerGlobals.LEVEL_INFO.get(anim_info.get("level")) * 100
 	
-	tween.interpolate_property(xp_bar, "value", null, xp_gain, 
+	tween.interpolate_property(xp_bar, "value", null, xp_bar.value + xp_gain, 
 	1, Tween.TRANS_CIRC, Tween.EASE_OUT)
 	tween.start()
 	

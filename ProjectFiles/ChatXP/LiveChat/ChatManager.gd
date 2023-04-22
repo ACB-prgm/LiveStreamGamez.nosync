@@ -7,13 +7,6 @@ const BASE_XP_GAIN = 100
 
 var current_stream = ""
 var playerTSCN = preload("res://ChatXP/ChatPlayer/ChatPlayer.tscn")
-#var default_player_info = {
-#	"icon" : null,
-#	"level": 1,
-#	"level_xp" : 0,
-#	"last_stream" : "",
-#	"num_comments" : 0
-#}
 var default_player_info = {
 	"progression" : {
 		"level": 1,
@@ -78,8 +71,6 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 		var level_up_threshold = TaskManagerGlobals.LEVEL_INFO.get(progression_info.get("level"))
 		var previous_level_xp = progression_info.get("level_xp")
 		var theoretical_level_xp = previous_level_xp + xp_gain
-		
-		prints(previous_level_xp, theoretical_level_xp, level_up_threshold)
 		
 		if  theoretical_level_xp > level_up_threshold: # level up!
 			level_up = true
