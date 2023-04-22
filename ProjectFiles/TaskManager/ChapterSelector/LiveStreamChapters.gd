@@ -82,8 +82,8 @@ func get_files_in_directory(path):
 	if !dir.dir_exists(path):
 		return files
 	
-	dir.open(path)
-	dir.list_dir_begin()
+	var _ERR = dir.open(path)
+	_ERR = dir.list_dir_begin()
 
 	while true:
 		var file = dir.get_next()

@@ -5,8 +5,8 @@ const PORT := 31419
 const BINDING := "127.0.0.1"
 const client_secret := "e346e1ul0W0mdqyPgIwBXeJy"
 const client_ID := "694582530887-sipt32jliecakrvo41l9b9g8ujfedk53.apps.googleusercontent.com"
-const auth_server := "https://accounts.google.com/o/oauth2/v2/auth"
-const token_req := "https://oauth2.googleapis.com/token"
+const AUTH_SERVER := "https://accounts.google.com/o/oauth2/v2/auth"
+const TOKEN_REQ := "https://oauth2.googleapis.com/token"
 
 var redirect_server := TCP_Server.new()
 var redirect_uri := "http://%s:%s" % [BINDING, PORT]
@@ -33,7 +33,6 @@ func _process(_delta):
 		var connection = redirect_server.take_connection()
 		var request = connection.get_string(connection.get_available_bytes())
 		if request:
-			print(request)
 			set_process(false)
 			var auth_code = request.split("&scope")[0].split("=")[1]
 			get_token_from_auth(auth_code)
@@ -46,7 +45,7 @@ func _process(_delta):
 
 func get_auth_code():
 	set_process(true)
-	var redir_err = redirect_server.listen(PORT, BINDING)
+	var _redir_err = redirect_server.listen(PORT, BINDING)
 	
 	var body_parts = [
 		"client_id=%s" % client_ID,
@@ -54,7 +53,7 @@ func get_auth_code():
 		"response_type=code",
 		"scope=https://www.googleapis.com/auth/youtube.readonly",
 	]
-	var url = auth_server + "?" + PoolStringArray(body_parts).join("&")
+	var url = AUTH_SERVER + "?" + PoolStringArray(body_parts).join("&")
 	
 # warning-ignore:return_value_discarded
 	OS.shell_open(url) # Opens window for user authentication
@@ -81,13 +80,12 @@ func get_token_from_auth(auth_code):
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	
-	var error = http_request.request(token_req, headers, true, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(TOKEN_REQ, headers, true, HTTPClient.METHOD_POST, body)
 	if error != OK:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
 	
 	var response = yield(http_request, "request_completed")
 	var response_body = parse_json(response[3].get_string_from_utf8())
-
 	token = response_body["access_token"]
 	refresh_token = response_body["refresh_token"]
 	
@@ -113,7 +111,7 @@ func refresh_tokens():
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	
-	var error = http_request.request(token_req, headers, true, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(TOKEN_REQ, headers, true, HTTPClient.METHOD_POST, body)
 
 	if error != OK:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
@@ -146,7 +144,7 @@ func is_token_valid() -> bool:
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	
-	var error = http_request.request(token_req + "info", headers, true, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(TOKEN_REQ + "info", headers, true, HTTPClient.METHOD_POST, body)
 	if error != OK:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
 	
