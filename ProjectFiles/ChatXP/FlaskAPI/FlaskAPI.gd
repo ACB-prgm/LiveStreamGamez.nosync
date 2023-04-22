@@ -18,6 +18,8 @@ func load_key():
 			file.close()
 		else:
 			print("ERROR LOADING FILE : %s" % error)
+	else:
+		print("KEY FILE NOT FOUND ON THIS DEVICE. API WILL NOT WORK.")
 	return data
 
 
