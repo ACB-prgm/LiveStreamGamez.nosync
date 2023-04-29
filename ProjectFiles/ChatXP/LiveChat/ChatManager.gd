@@ -45,7 +45,7 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 	current_stream = "test"
 	
 	for comment in chat:
-		var user = comment[0]
+		var user = comment[0].percent_encode()
 		comment = comment[1]
 		
 		var info : Dictionary
