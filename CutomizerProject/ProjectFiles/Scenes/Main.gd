@@ -12,11 +12,11 @@ onready var head_material = $Control/Head.material
 onready var white_lines_material = $WhiteLinesTop.material
 onready var bottom_colors_material = $BotomColorsAndTopWhite.material
 onready var bar = $Bar
+onready var button = $Button
 onready var eyes = [
 	[$Control/EyeLeft, $Control/EyeLeft.rect_global_position, Vector2(-50,0) + $Control/EyeLeft.rect_size / 2.0], 
 	[$Control/EyeRight, $Control/EyeRight.rect_global_position, Vector2(50,0)  + $Control/EyeRight.rect_size / 2.0]
 ]
-
 
 var w_lines_dir: = -1
 var bar_dir: = 1
@@ -25,8 +25,6 @@ var bar_dir: = 1
 func _ready():
 	tween.interpolate_property(self, "modulate:a", 0, 1, 1, Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT)
 	tween.start()
-	
-	
 	bar.rect_position.x = BAR_DIST
 	w_lines_tween()
 	bar_tween()
@@ -80,4 +78,7 @@ func _on_Tween_tween_completed(object, _key):
 		w_lines_tween()
 	if object == bar:
 		bar_tween()
-		
+
+
+func _on_Button_pressed():
+	GoogleSignIn.authorize()

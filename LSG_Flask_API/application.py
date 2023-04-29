@@ -1,23 +1,52 @@
 from flask import Flask, jsonify, request, make_response
-import os
+import requests
 import boto3
 import json
+import os
 
 
-LSG_KEY = os.environ.get('LSG_KEY')
+LSG_KEY = os.environ.get("LSG_KEY")
+API_KEY = os.environ.get("API_KEY")
+YT_DATA_ENDPOINT = "https://www.googleapis.com/youtube/v3/channels"
 BUCKET = "lsg-user-info"
 USER_INFO_JSON = "user_info.json"
 ID_LOOKUP_JSON = "user_id_lookup.json"
 
 application = Flask(__name__)
-
-# create S3 client object with the credentials
-s3 = boto3.client('s3')
+s3 = boto3.client("s3")
 
 
 @application.route("/", methods=["GET"])
 def home():
     return "Hello World!"
+
+# PUT METHODS ————————————————————————————————————————————————————————————————————————————————————————————
+@application.route("/matchid/", methods=["PUT"])
+def match_id_and_display_name():
+    data = request.get_json()
+    token = data.get("token")
+    id_token = data.get("id")
+
+    if not token:
+        error(400, "'token' not found in request body")
+    if not id_token:
+        error(400, "'id' not found in request body")
+    
+    # Make YT Data API request
+    params = {
+        "part": "snippet",
+        "mine": True,
+    }
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json"
+    }
+    response = requests.get(YT_DATA_ENDPOINT, params=params, headers=headers).json()
+
+    display_name = response["items"][0]["snippet"]["title"]
+    set_id_username_pair(id_token, display_name)
+
+    return jsonify({"display_name":display_name})
 
 
 # Check if a user with the given user_name or user_id exists
@@ -32,14 +61,6 @@ def user_exists(user_name=None, user_id=None):
     users = json.loads(s3.get_object(Bucket=BUCKET, Key=USER_INFO_JSON)["Body"].read().decode("utf-8"))
     
     return jsonify(users.get(user_name) != None)
-
-
-@application.route("/users/id/<string:user_id>/<string:user_name>", methods=["PUT"])
-def create_user_id_lookup(user_id, user_name):
-    id_lookups = json.loads(s3.get_object(Bucket=BUCKET, Key=ID_LOOKUP_JSON)["Body"].read().decode("utf-8"))
-    id_lookups[user_id] = user_name
-    s3.put_object(Bucket=BUCKET, Key=USER_INFO_JSON, Body=json.dumps(id_lookups))
-    return jsonify({"message" : f"Successfully added {user_id}/{user_name}"})
 
 
 # Update the info of a user with the given user_name or user_id
@@ -87,7 +108,7 @@ def update_all_users_info():
     s3.put_object(Bucket=BUCKET, Key=USER_INFO_JSON, Body=json.dumps(new_info))
     return jsonify({"message": "Updated info for all users"})
 
-
+# GET METHODS ————————————————————————————————————————————————————————————————————————————————————————————
 # Get the info of a user with the given user_name and id_key
 @application.route("/users/name/<string:user_name>/info", methods=["GET"])
 @application.route("/users/id/<string:user_id>/info", methods=["GET"])
@@ -125,10 +146,16 @@ def get_username_from_id(user_id) -> str:
     return users.get(user_id)
 
 
+def set_id_username_pair(user_id, user_name) -> None:
+    users = json.loads(s3.get_object(Bucket=BUCKET, Key=ID_LOOKUP_JSON)["Body"].read().decode("utf-8"))
+    users[user_id] = user_name
+    s3.put_object(Bucket=BUCKET, Key=ID_LOOKUP_JSON, Body=json.dumps(users))
+
+
 def error(num, message):
     status_code = num
     message = message
-    response = make_response(jsonify({'error': message}), status_code)
+    response = make_response(jsonify({"error": message}), status_code)
     return response
 
 

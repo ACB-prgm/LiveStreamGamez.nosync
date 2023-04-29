@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Background="*res://Scenes/Background/Background.tscn"
+GoogleSignIn="*res://Scenes/BackendScripts/GoogleSignIn.gd"
 
 [debug]
 

@@ -27,6 +27,6 @@ func grid_tween() -> void:
 	tween.start()
 
 
-func _on_Tween_tween_completed(object, key):
+func _on_Tween_tween_completed(object, _key):
 	if object == grid_material:
 		grid_tween()
