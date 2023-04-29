@@ -35,7 +35,7 @@ func _ready() -> void:
 		log_info(data)
 	var _err = GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
 	# TESTING
-	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["ACB_Gamez", "test"]])
+	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["YoungWood", "test"]])
 
 
 # CHAT FUNCTIONS ———————————————————————————————————————————————————————————————

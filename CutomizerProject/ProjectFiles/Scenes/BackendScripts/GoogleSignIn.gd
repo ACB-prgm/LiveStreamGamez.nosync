@@ -3,7 +3,6 @@ extends Node
 
 const PORT := 8000
 const BINDING := "127.0.0.1"
-const FLASK_URL := "http://lsg-flask-api-env.eba-6hk8kiiv.us-east-1.elasticbeanstalk.com"
 const CLIENT_SECRET_PATH = "res://Scenes/BackendScripts/client_secret.dat"
 const AUTH_SERVER := "https://accounts.google.com/o/oauth2/v2/auth"
 const TOKEN_REQ := "https://oauth2.googleapis.com/token"
@@ -23,7 +22,7 @@ signal token_recieved
 
 # HIGH LEVEL FUNCTIONS —————————————————————————————————————————————————————————
 func _ready():
-	var _E = connect("token_recieved", self, "_on_token_recieved")
+	var _E = connect("token_recieved", FlaskApi, "_on_token_recieved")
 	set_process(false)
 	client_secrets = load_client_secrets()
 
@@ -36,31 +35,6 @@ func authorize(force_signin:=false) -> void:
 		
 		if !id_token:
 			get_auth_code()
-
-
-func _on_token_recieved():
-	var endpoint = "/matchid/"
-	var body = to_json({
-		"token" : token,
-		"id" : id_token
-	})
-	var headers = PoolStringArray([
-		"Content-Type: application/json"
-	])
-	
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	var error = http_request.request(FLASK_URL.plus_file(endpoint), 
-		headers, true, HTTPClient.METHOD_PUT, body)
-	if error != OK:
-		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
-	
-	var response = yield(http_request, "request_completed")
-	
-	var response_body = parse_json(response[3].get_string_from_utf8())
-	
-	display_name = response_body.get("display_name")
-	save_tokens()
 
 
 # OAUTH2.0 FUNCTIONS ———————————————————————————————————————————————————————————

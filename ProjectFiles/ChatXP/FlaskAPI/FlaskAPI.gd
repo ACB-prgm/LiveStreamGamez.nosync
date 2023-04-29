@@ -42,6 +42,7 @@ func update_user_info(user_name:String, info:Dictionary) -> void:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
 	
 	var response = yield(http_request, "request_completed")
+	print(response[3].get_string_from_utf8())
 	var response_body = parse_json(response[3].get_string_from_utf8())
 	print(response_body)
 
