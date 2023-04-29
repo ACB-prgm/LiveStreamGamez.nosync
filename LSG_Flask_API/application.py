@@ -126,7 +126,7 @@ def get_user_info(user_name=None, user_id=None):
     if not info:
         error(400, "user_name not found")
     
-    return jsonify({"info" : info})
+    return jsonify({user_name : info})
 
 
 # Get the info of all users for the given id_key

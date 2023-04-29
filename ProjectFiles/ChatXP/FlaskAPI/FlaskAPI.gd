@@ -87,7 +87,7 @@ func get_user_info(user_name:String) -> Dictionary:
 	
 	var response = yield(http_request, "request_completed")
 	var response_body = parse_json(response[3].get_string_from_utf8())
-	return response_body.get("info")
+	return response_body.get(user_name)
 
 
 func get_all_users_info() -> void:
