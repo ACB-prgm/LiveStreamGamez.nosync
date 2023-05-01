@@ -10,7 +10,7 @@
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="IconButton" type="Button"]
-modulate = Color( 1.2, 1.2, 1.2, 1 )
+self_modulate = Color( 1.2, 1.2, 1.2, 1 )
 margin_right = 307.0
 margin_bottom = 96.0
 rect_min_size = Vector2( 0, 96 )
@@ -30,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 25.0
 margin_top = 10.0
-margin_right = -25.0
+margin_right = -30.0
 margin_bottom = -10.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -44,11 +44,22 @@ texture = ExtResource( 1 )
 expand = true
 stretch_mode = 4
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="NameLabel" type="Label" parent="HBoxContainer"]
 margin_left = 84.0
 margin_top = 18.0
-margin_right = 257.0
+margin_right = 169.0
 margin_bottom = 58.0
+size_flags_horizontal = 3
 custom_fonts/font = ExtResource( 2 )
-text = "Name | LV 0"
+text = "Name"
+valign = 1
+
+[node name="LevelLabel" type="Label" parent="HBoxContainer"]
+margin_left = 189.0
+margin_top = 18.0
+margin_right = 252.0
+margin_bottom = 58.0
+size_flags_horizontal = 8
+custom_fonts/font = ExtResource( 2 )
+text = "LV 0"
 valign = 1

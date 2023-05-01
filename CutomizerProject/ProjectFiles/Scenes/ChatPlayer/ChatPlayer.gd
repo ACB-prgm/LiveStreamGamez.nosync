@@ -28,5 +28,4 @@ func populate_player_info() -> void:
 
 func _on_info_received(info):
 	player_info = info
-	print(info)
 	populate_player_info()

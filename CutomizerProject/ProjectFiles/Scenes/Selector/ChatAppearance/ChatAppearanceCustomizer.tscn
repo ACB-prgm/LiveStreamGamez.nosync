@@ -159,10 +159,10 @@ margin_bottom = 12.0
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 66.0
-margin_top = 66.0
-margin_right = -34.0
-margin_bottom = -34.0
+margin_left = 78.0
+margin_top = 78.0
+margin_right = -22.0
+margin_bottom = -22.0
 
 [node name="IconScrollContainer" type="ScrollContainer" parent="HBoxContainer/TabContainer"]
 visible = false
@@ -178,6 +178,7 @@ margin_right = 591.0
 margin_bottom = 786.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/separation = 15
 
 [node name="PanelContainer" parent="HBoxContainer" instance=ExtResource( 3 )]
 margin_left = 978.0

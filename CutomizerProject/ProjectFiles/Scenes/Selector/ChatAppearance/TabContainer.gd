@@ -11,16 +11,13 @@ signal icon_selected(button)
 signal player_info_updated(info)
 
 
-func _ready():
-	load_icons()
-
-
 func _on_OptionsContainer_option_selected(option):
 	set_current_tab(option)
 
 
 func _on_ChatAppearanceCustomizer_info_received(info):
 	player_info = info
+	load_icons()
 
 
 
@@ -54,12 +51,16 @@ func load_icons() -> void:
 		print("An error occurred when trying to access the path.")
 	
 	# populate icons
+	var player_level = player_info["progression"]["level"]
 	for icon in icons:
 		var button = icon_button.instance()
 		button.connect("pressed", self, "_on_icon_selected", [button])
 		var _err = connect("icon_selected", button, "_on_other_pressed")
 		icon_container.add_child(button)
 		button.populate_info(icon[0], icon[1], icon[2])
+		
+		if player_level < icon[2]:
+			button.set_disabled(true)
 
 func sort_icon(a, b) -> bool:
 	return a[2] < b[2]
