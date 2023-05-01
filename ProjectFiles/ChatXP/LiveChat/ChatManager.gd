@@ -3,7 +3,7 @@ extends PanelContainer
 
 const SAVE_DIR = 'user://ChatPlayers/'
 const ALPHA_VALUE = 0.5
-const BASE_XP_GAIN = 100
+const BASE_XP_GAIN = 50
 const LOG_HIST = 10
 
 var current_stream = ""
@@ -29,11 +29,13 @@ onready var chat_timer = $Timer
 
 
 func _ready() -> void:
+	yield(FlaskAPI.update_all_users_info({}), "completed")
 	modulate.a = ALPHA_VALUE
 	var data = yield(FlaskAPI.get_all_users_info(), "completed")
 	if data:
 		ChatPlayerData = data
 		log_info(data)
+	
 	var _err = GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
 	# TESTING
 	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["YoungWood", "test"]])
@@ -44,19 +46,17 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 	modulate.a = 1
 #	current_stream = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
 	current_stream = "test"
-	
 	for comment in chat:
 		var user = comment[0].percent_encode()
 		comment = comment[1]
-		
 		var info : Dictionary
 		if user in ChatPlayerData.keys():
-			info = ChatPlayerData[user]
+			info = ChatPlayerData.get(user)
 		else:
-			info = default_player_info.duplicate()
+			info = default_player_info.duplicate(true)
 		
 		# UPDATE USER PROGRESSION ————————————————
-		var progression_info = info["progression"]
+		var progression_info = info.get("progression")
 		progression_info["level"] = int(progression_info["level"])
 		# Update comment stats
 		if progression_info["last_stream"] == current_stream:
@@ -67,10 +67,10 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 		progression_info["total_num_comments"] += 1
 		
 		# Update XP
-		var bonus_xp = clamp(BASE_XP_GAIN * (progression_info.get("current_num_comments")-1) * 0.25, 0, 300) # reward participation
+		var bonus_xp = clamp(BASE_XP_GAIN * (progression_info.get("current_num_comments")-1) * 0.25, 0, 250) # reward participation
 		var xp_gain = BASE_XP_GAIN + bonus_xp
 		var level_up = false
-		var level_up_threshold = TaskManagerGlobals.LEVEL_INFO.get(progression_info.get("level"))
+		var level_up_threshold = TaskManagerGlobals.level_func(progression_info.get("level"))
 		var previous_level_xp = progression_info.get("level_xp")
 		var theoretical_level_xp = previous_level_xp + xp_gain
 		
@@ -82,7 +82,7 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 		else:
 			progression_info["level_xp"] = theoretical_level_xp
 		
-		progression_info["xpbar_value"] = progression_info.get("level_xp") / TaskManagerGlobals.LEVEL_INFO.get(progression_info.get("level")) * 100
+		progression_info["xpbar_value"] = progression_info.get("level_xp") / TaskManagerGlobals.level_func(progression_info.get("level")) * 100
 		
 		ChatPlayerData[user] = info # Update working info
 		FlaskAPI.update_user_info(user, info) # Update Cloud info
@@ -98,7 +98,7 @@ func spawn_chatPlayer(user:String, comment:String, info:Dictionary, previous_xp:
 	var start_level = info["progression"].get("level")
 	if level_up:
 		start_level -= 1
-	bar_start_val = bar_start_val / TaskManagerGlobals.LEVEL_INFO.get(start_level) * 100
+	bar_start_val = bar_start_val / TaskManagerGlobals.level_func(start_level) * 100
 	
 	var anim_info = {
 			"user" : user,

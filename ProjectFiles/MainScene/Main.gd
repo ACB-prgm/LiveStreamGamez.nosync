@@ -7,10 +7,6 @@ onready var chaptersButton = $ChaptersButton
 func _ready():
 	chaptersButton.modulate.a = 0.1
 	get_tree().root.set_transparent_background(true)
-	
-	
-
-
 
 
  #### CHAPTERS SELECT ####
