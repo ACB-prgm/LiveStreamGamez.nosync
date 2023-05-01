@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Images/Head.png" type="Texture" id=1]
+[ext_resource path="res://Images/Eye_Right.png" type="Texture" id=2]
+[ext_resource path="res://Images/Eye_Left.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/Background/Head.gd" type="Script" id=4]
+[ext_resource path="res://Resources/Shaders/Perspective.tres" type="Material" id=5]
+
+[node name="Head" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+script = ExtResource( 4 )
+
+[node name="EyeLeft" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -150.0
+margin_top = -150.0
+margin_right = 150.0
+margin_bottom = 150.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="EyeRight" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -150.0
+margin_top = -150.0
+margin_right = 150.0
+margin_bottom = 150.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Head" type="TextureRect" parent="."]
+material = ExtResource( 5 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6

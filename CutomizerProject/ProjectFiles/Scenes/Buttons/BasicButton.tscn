@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Resources/LabelStylebox.tres" type="StyleBox" id=1]
+[ext_resource path="res://Resources/TMFont.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Resources/LabelBlue.tres" type="StyleBox" id=3]
+
+[node name="Button" type="Button"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+margin_right = 204.0
+margin_bottom = 60.0
+focus_mode = 0
+custom_colors/font_color_disabled = Color( 0.4, 0.176471, 0.176471, 1 )
+custom_colors/font_color = Color( 1, 0.25098, 0.25098, 1 )
+custom_colors/font_color_hover = Color( 0.294118, 0.858824, 1, 1 )
+custom_colors/font_color_pressed = Color( 0.589852, 0.91797, 1, 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_styles/hover = ExtResource( 3 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/focus = ExtResource( 3 )
+custom_styles/disabled = ExtResource( 1 )
+custom_styles/normal = ExtResource( 1 )
+text = "SIGN IN"

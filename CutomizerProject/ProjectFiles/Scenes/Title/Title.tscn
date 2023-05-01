@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Buttons/BasicButton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Title/Title.gd" type="Script" id=2]
+
+[node name="Title" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 304, 120 )
+script = ExtResource( 2 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Button" parent="." instance=ExtResource( 1 )]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -102.0
+margin_top = 184.0
+margin_right = 102.0
+margin_bottom = 244.0
+focus_mode = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

@@ -12,6 +12,7 @@ var default_player_info = {
 	"progression" : {
 		"level": 1,
 		"level_xp" : 0,
+		"xpbar_value" : 0.0,
 		"last_stream" : "",
 		"total_num_comments" : 0, # num lifetime comments
 		"current_num_comments" : 0 # num comments on current stream
@@ -80,6 +81,8 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 			progression_info["level"] += 1
 		else:
 			progression_info["level_xp"] = theoretical_level_xp
+		
+		progression_info["xpbar_value"] = progression_info.get("level_xp") / TaskManagerGlobals.LEVEL_INFO.get(progression_info.get("level")) * 100
 		
 		ChatPlayerData[user] = info # Update working info
 		FlaskAPI.update_user_info(user, info) # Update Cloud info

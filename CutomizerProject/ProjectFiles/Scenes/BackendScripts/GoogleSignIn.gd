@@ -25,16 +25,19 @@ func _ready():
 	var _E = connect("token_recieved", FlaskApi, "_on_token_recieved")
 	set_process(false)
 	client_secrets = load_client_secrets()
+	
+	load_tokens()
 
 
 func authorize(force_signin:=false) -> void:
 	if force_signin:
 		get_auth_code()
 	else:
-		load_tokens()
-		
-		if !id_token:
+		if !(id_token and display_name):
 			get_auth_code()
+		else:
+			yield(get_tree().create_timer(0.01), "timeout")
+			emit_signal("token_recieved")
 
 
 # OAUTH2.0 FUNCTIONS ———————————————————————————————————————————————————————————

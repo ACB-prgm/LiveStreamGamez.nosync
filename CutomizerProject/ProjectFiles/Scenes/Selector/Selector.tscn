@@ -1,0 +1,108 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Fonts/Flat-it - BioSans-Regular.otf" type="DynamicFontData" id=1]
+[ext_resource path="res://Scenes/Buttons/BasicButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Resources/LabelStylebox.tres" type="StyleBox" id=3]
+[ext_resource path="res://Scenes/Selector/Selector.gd" type="Script" id=4]
+[ext_resource path="res://Resources/TMFont.tres" type="DynamicFont" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 64
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 25.0
+content_margin_right = 25.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+bg_color = Color( 0.15, 0.15, 0.15, 1 )
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color( 1, 0.25098, 0.25098, 1 )
+corner_radius_top_left = 20
+corner_radius_bottom_right = 20
+corner_detail = 1
+shadow_size = 2
+
+[node name="Selector" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 4 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="SignoutButton" parent="." instance=ExtResource( 2 )]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 268.0
+margin_bottom = 124.0
+text = "SIGN OUT"
+
+[node name="CustomizationMenu" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="CustomizationMenu"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -346.5
+margin_top = 72.0
+margin_right = 346.5
+margin_bottom = 171.0
+custom_colors/font_color = Color( 1, 0.25098, 0.25098, 1 )
+custom_colors/font_color_shadow = Color( 0.15, 0.15, 0.15, 1 )
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 2 )
+text = "Custimization Menu"
+align = 1
+uppercase = true
+
+[node name="PlayerInfo" type="Label" parent="CustomizationMenu"]
+modulate = Color( 1.2, 1.2, 1.2, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -133.0
+margin_top = 187.0
+margin_right = 133.0
+margin_bottom = 247.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 133, 30 )
+custom_colors/font_color = Color( 1, 0.25098, 0.25098, 1 )
+custom_fonts/font = ExtResource( 5 )
+custom_styles/normal = ExtResource( 3 )
+text = "Player | Level 0"
+align = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomizationMenu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -330.0
+margin_top = -271.0
+margin_right = 330.0
+margin_bottom = 271.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="ChatApprButton" parent="CustomizationMenu/VBoxContainer" instance=ExtResource( 2 )]
+margin_top = 201.0
+margin_right = 660.0
+margin_bottom = 261.0
+text = "CHAT APPEARANCE"
+
+[node name="GodotGatchiButton" parent="CustomizationMenu/VBoxContainer" instance=ExtResource( 2 )]
+margin_top = 281.0
+margin_right = 660.0
+margin_bottom = 341.0
+text = "GODOTGATCHI"
+
+[connection signal="pressed" from="SignoutButton" to="." method="_on_SignoutButton_pressed"]
+[connection signal="pressed" from="CustomizationMenu/VBoxContainer/ChatApprButton" to="." method="_on_ChatApprButton_pressed"]

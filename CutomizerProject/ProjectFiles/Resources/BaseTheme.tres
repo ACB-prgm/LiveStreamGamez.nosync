@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Selector/ChatAppearance/LableBlueDisabled.tres" type="StyleBox" id=1]
+[ext_resource path="res://Resources/Font_22.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Resources/LabelBlue.tres" type="StyleBox" id=3]
+
+[resource]
+TabContainer/fonts/font = ExtResource( 2 )
+TabContainer/styles/panel = ExtResource( 3 )
+TabContainer/styles/tab_bg = ExtResource( 1 )
+TabContainer/styles/tab_fg = ExtResource( 3 )

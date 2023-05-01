@@ -1,0 +1,129 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Scenes/Background/CircleEffects/CircleEffects.gd" type="Script" id=1]
+[ext_resource path="res://Images/Circle_shadow.png" type="Texture" id=3]
+[ext_resource path="res://Images/IntermissionImages.png" type="Texture" id=4]
+[ext_resource path="res://Images/circle_shadow_noshadow.png" type="Texture" id=5]
+[ext_resource path="res://Images/IntermissionImages_6.png" type="Texture" id=6]
+[ext_resource path="res://Images/IntermissionImages_5.png" type="Texture" id=7]
+[ext_resource path="res://Images/IntermissionImages_03.png" type="Texture" id=8]
+[ext_resource path="res://Images/IntermissionImages_2.png" type="Texture" id=9]
+[ext_resource path="res://Images/IntermissionImages_4.png" type="Texture" id=10]
+[ext_resource path="res://Resources/Shaders/MaskShader.gdshader" type="Shader" id=11]
+[ext_resource path="res://Images/bar.png" type="Texture" id=12]
+[ext_resource path="res://Resources/Shaders/ShapeMask.tres" type="Material" id=13]
+
+[sub_resource type="ShaderMaterial" id=9]
+resource_local_to_scene = true
+shader = ExtResource( 11 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( 1, 1 )
+shader_param/speed = 0.0
+shader_param/snap_distance = 0.0
+shader_param/texture_mask = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=10]
+resource_local_to_scene = true
+shader = ExtResource( 11 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( -1, 0 )
+shader_param/speed = 0.02
+shader_param/snap_distance = 0.0
+shader_param/texture_mask = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=13]
+resource_local_to_scene = true
+shader = ExtResource( 11 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( 1, 0 )
+shader_param/speed = 0.1
+shader_param/snap_distance = 0.083
+shader_param/texture_mask = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=11]
+resource_local_to_scene = true
+shader = ExtResource( 11 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( 1, 0 )
+shader_param/speed = 0.04
+shader_param/snap_distance = 0.0
+shader_param/texture_mask = ExtResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = ExtResource( 11 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( 1, 1 )
+shader_param/speed = 0.0
+shader_param/snap_distance = 0.0
+shader_param/texture_mask = ExtResource( 5 )
+
+[node name="CircleEffects" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="CenterCircle" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="WhiteLinesTop" type="TextureRect" parent="."]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 960, 270 )
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 1
+flip_h = true
+
+[node name="AngledLines" type="TextureRect" parent="."]
+material = SubResource( 10 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+
+[node name="GrayBars" type="TextureRect" parent="."]
+material = SubResource( 13 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+
+[node name="Colors" type="TextureRect" parent="."]
+material = SubResource( 11 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+
+[node name="NumberBoxes" type="TextureRect" parent="."]
+material = ExtResource( 13 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
+
+[node name="BotomColorsAndTopWhite" type="TextureRect" parent="."]
+material = SubResource( 12 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
+
+[node name="Bar" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 960, 540 )
+texture = ExtResource( 12 )
+
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]

@@ -1,0 +1,166 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Scenes/Selector/ChatAppearance/ChatAppearanceCustomizer.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Selector/ChatAppearance/OptionsContainer.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/ChatPlayer/ChatPlayer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Buttons/BasicButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Selector/ChatAppearance/TabContainer.gd" type="Script" id=5]
+[ext_resource path="res://Resources/BaseTheme.tres" type="Theme" id=6]
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 50.0
+content_margin_right = 50.0
+content_margin_top = 50.0
+content_margin_bottom = 50.0
+bg_color = Color( 0.15, 0.15, 0.15, 1 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 0.294118, 0.858824, 1, 1 )
+corner_radius_top_left = 40
+corner_radius_bottom_right = 40
+corner_detail = 1
+
+[node name="ChatAppearanceCustomizer" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="BackButton" parent="." instance=ExtResource( 4 )]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 268.0
+margin_bottom = 124.0
+focus_mode = 2
+text = "BACK"
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 64.0
+margin_top = -398.0
+margin_right = 1892.0
+margin_bottom = 488.0
+mouse_filter = 2
+custom_constants/separation = 30
+alignment = 1
+
+[node name="OptionsContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_right = 227.0
+margin_bottom = 886.0
+mouse_filter = 2
+custom_constants/separation = 20
+alignment = 1
+script = ExtResource( 2 )
+
+[node name="InfoButton" parent="HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+margin_top = 293.0
+margin_right = 227.0
+margin_bottom = 353.0
+size_flags_horizontal = 0
+toggle_mode = true
+text = "INFO COLOR"
+
+[node name="StyleBoxButton" parent="HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+margin_top = 373.0
+margin_right = 205.0
+margin_bottom = 433.0
+size_flags_horizontal = 0
+toggle_mode = true
+text = "STYLE BOX"
+
+[node name="XPBarButton" parent="HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+margin_top = 453.0
+margin_right = 154.0
+margin_bottom = 513.0
+size_flags_horizontal = 0
+toggle_mode = true
+text = "XP BAR"
+
+[node name="IconButton" parent="HBoxContainer/OptionsContainer" instance=ExtResource( 4 )]
+margin_top = 533.0
+margin_right = 122.0
+margin_bottom = 593.0
+size_flags_horizontal = 0
+toggle_mode = true
+text = "ICON"
+
+[node name="TabContainer" type="TabContainer" parent="HBoxContainer"]
+self_modulate = Color( 1.2, 1.2, 1.2, 1 )
+margin_left = 257.0
+margin_right = 948.0
+margin_bottom = 886.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 2 )
+tabs_visible = false
+all_tabs_in_front = true
+script = ExtResource( 5 )
+
+[node name="InfoColorPicker" type="ColorPicker" parent="HBoxContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = -50.0
+margin_bottom = -50.0
+
+[node name="StyleBoxTabContainer" type="TabContainer" parent="HBoxContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = -50.0
+margin_bottom = -50.0
+theme = ExtResource( 6 )
+all_tabs_in_front = true
+
+[node name="OUTLINE" type="ColorPicker" parent="HBoxContainer/TabContainer/StyleBoxTabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 48.0
+
+[node name="BACKGROUND" type="TabContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 25.0
+margin_top = 58.0
+margin_right = -25.0
+margin_bottom = -10.0
+theme = ExtResource( 6 )
+
+[node name="BG COLOR" type="ColorPicker" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 25.0
+margin_top = 58.0
+margin_right = -25.0
+margin_bottom = -10.0
+
+[node name="Patterns" type="ScrollContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
+visible = false
+margin_right = 12.0
+margin_bottom = 12.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND/Patterns"]
+
+[node name="PanelContainer" parent="HBoxContainer" instance=ExtResource( 3 )]
+margin_left = 978.0
+margin_top = 293.0
+margin_right = 1828.0
+margin_bottom = 593.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[connection signal="info_received" from="." to="HBoxContainer/TabContainer" method="_on_ChatAppearanceCustomizer_info_received"]
+[connection signal="info_received" from="." to="HBoxContainer/PanelContainer" method="_on_ChatAppearanceCustomizer_info_received"]
+[connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
+[connection signal="option_selected" from="HBoxContainer/OptionsContainer" to="HBoxContainer/TabContainer" method="_on_OptionsContainer_option_selected"]

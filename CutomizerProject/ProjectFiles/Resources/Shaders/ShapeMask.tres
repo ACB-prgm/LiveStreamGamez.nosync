@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://Images/circle_shadow_noshadow.png" type="Texture" id=1]
+[ext_resource path="res://Resources/Shaders/MaskShader.gdshader" type="Shader" id=2]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource( 2 )
+shader_param/scale = Vector2( 1, 1 )
+shader_param/movement_dir = Vector2( 1, 1 )
+shader_param/speed = 0.0
+shader_param/snap_distance = 0.0
+shader_param/texture_mask = ExtResource( 1 )

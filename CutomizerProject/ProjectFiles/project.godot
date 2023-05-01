@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="LiveStreamCustomizer"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Scenes/TabMain/TabsMain.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -19,6 +19,7 @@ config/icon="res://icon.png"
 Background="*res://Scenes/Background/Background.tscn"
 GoogleSignIn="*res://Scenes/BackendScripts/GoogleSignIn.gd"
 FlaskApi="*res://Scenes/BackendScripts/FlaskAPI.gd"
+GlobalWorldEnvironment="*res://Resources/WorldEnvironment.tscn"
 
 [debug]
 
