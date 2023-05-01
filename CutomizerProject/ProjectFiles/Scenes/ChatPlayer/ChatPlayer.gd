@@ -26,6 +26,7 @@ func populate_player_info() -> void:
 	xp_bar.set_value(progression["xpbar_value"])
 
 
-func _on_ChatAppearanceCustomizer_info_received(info):
+func _on_info_received(info):
 	player_info = info
+	print(info)
 	populate_player_info()

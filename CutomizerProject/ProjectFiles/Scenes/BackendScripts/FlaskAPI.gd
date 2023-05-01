@@ -5,7 +5,10 @@ extends Node
 const FLASK_URL := "http://127.0.0.1:5000"
 
 
-func _on_token_recieved():
+func _on_token_recieved() -> void:
+	if not yield(GoogleSignIn.is_token_valid(), "completed"):
+		return
+	
 	var token = GoogleSignIn.token
 	var id_token = GoogleSignIn.id_token
 	

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Resources/OutlineOnlyStylebox.tres" type="StyleBox" id=1]
 [ext_resource path="res://Resources/TMFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Resources/OutlineWithFill.tres" type="StyleBox" id=3]
 [ext_resource path="res://Scenes/ChatPlayer/ChatPlayer.gd" type="Script" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxLine" id=1]
 color = Color( 1, 1, 1, 1 )
@@ -45,25 +46,30 @@ margin_bottom = 40.0
 custom_constants/separation = 15
 
 [node name="Icon" type="TextureRect" parent="PanelContainer/VBoxContainer/Identifier"]
+margin_right = 40.0
 margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Identifier"]
-margin_left = 15.0
-margin_right = 196.0
+margin_left = 55.0
+margin_right = 236.0
 margin_bottom = 40.0
 custom_fonts/font = ExtResource( 2 )
 text = "Player Name"
 valign = 1
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/VBoxContainer/Identifier"]
-margin_left = 211.0
-margin_right = 215.0
+margin_left = 251.0
+margin_right = 255.0
 margin_bottom = 40.0
 custom_styles/separator = SubResource( 1 )
 
 [node name="LevelLabel" type="Label" parent="PanelContainer/VBoxContainer/Identifier"]
-margin_left = 230.0
-margin_right = 293.0
+margin_left = 270.0
+margin_right = 333.0
 margin_bottom = 40.0
 custom_fonts/font = ExtResource( 2 )
 text = "Lv 1"
@@ -71,8 +77,8 @@ valign = 1
 uppercase = true
 
 [node name="ProgressBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/Identifier"]
-margin_left = 308.0
-margin_right = 708.0
+margin_left = 348.0
+margin_right = 748.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 400, 0 )
 custom_styles/fg = SubResource( 2 )

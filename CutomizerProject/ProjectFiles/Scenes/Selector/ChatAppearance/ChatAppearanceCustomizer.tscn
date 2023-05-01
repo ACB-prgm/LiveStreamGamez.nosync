@@ -104,7 +104,6 @@ all_tabs_in_front = true
 script = ExtResource( 5 )
 
 [node name="InfoColorPicker" type="ColorPicker" parent="HBoxContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
@@ -113,6 +112,7 @@ margin_right = -50.0
 margin_bottom = -50.0
 
 [node name="StyleBoxTabContainer" type="TabContainer" parent="HBoxContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 50.0
@@ -123,12 +123,15 @@ theme = ExtResource( 6 )
 all_tabs_in_front = true
 
 [node name="OUTLINE" type="ColorPicker" parent="HBoxContainer/TabContainer/StyleBoxTabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 48.0
+margin_left = 25.0
+margin_top = 58.0
+margin_right = -25.0
+margin_bottom = -10.0
 
 [node name="BACKGROUND" type="TabContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 25.0
@@ -137,7 +140,7 @@ margin_right = -25.0
 margin_bottom = -10.0
 theme = ExtResource( 6 )
 
-[node name="BG COLOR" type="ColorPicker" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
+[node name="COLOR" type="ColorPicker" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 25.0
@@ -145,12 +148,36 @@ margin_top = 58.0
 margin_right = -25.0
 margin_bottom = -10.0
 
-[node name="Patterns" type="ScrollContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
+[node name="PATTERNS" type="ScrollContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND"]
 visible = false
 margin_right = 12.0
 margin_bottom = 12.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND/Patterns"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer/StyleBoxTabContainer/BACKGROUND/PATTERNS"]
+
+[node name="XPBarColorPicker" type="ColorPicker" parent="HBoxContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 66.0
+margin_top = 66.0
+margin_right = -34.0
+margin_bottom = -34.0
+
+[node name="IconScrollContainer" type="ScrollContainer" parent="HBoxContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 50.0
+margin_top = 50.0
+margin_right = -50.0
+margin_bottom = -50.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer/IconScrollContainer"]
+margin_right = 591.0
+margin_bottom = 786.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="PanelContainer" parent="HBoxContainer" instance=ExtResource( 3 )]
 margin_left = 978.0
@@ -161,6 +188,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 
 [connection signal="info_received" from="." to="HBoxContainer/TabContainer" method="_on_ChatAppearanceCustomizer_info_received"]
-[connection signal="info_received" from="." to="HBoxContainer/PanelContainer" method="_on_ChatAppearanceCustomizer_info_received"]
+[connection signal="info_received" from="." to="HBoxContainer/PanelContainer" method="_on_info_received"]
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="option_selected" from="HBoxContainer/OptionsContainer" to="HBoxContainer/TabContainer" method="_on_OptionsContainer_option_selected"]
+[connection signal="player_info_updated" from="HBoxContainer/TabContainer" to="HBoxContainer/PanelContainer" method="_on_info_received"]
