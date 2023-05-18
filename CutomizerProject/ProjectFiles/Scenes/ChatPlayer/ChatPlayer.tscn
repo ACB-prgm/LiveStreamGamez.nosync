@@ -12,7 +12,8 @@ thickness = 3
 vertical = true
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+resource_local_to_scene = true
+bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -83,6 +84,7 @@ margin_bottom = 40.0
 rect_min_size = Vector2( 400, 0 )
 custom_styles/fg = SubResource( 2 )
 custom_styles/bg = ExtResource( 1 )
+value = 50.0
 percent_visible = false
 
 [node name="CommentLabel" type="Label" parent="PanelContainer/VBoxContainer"]

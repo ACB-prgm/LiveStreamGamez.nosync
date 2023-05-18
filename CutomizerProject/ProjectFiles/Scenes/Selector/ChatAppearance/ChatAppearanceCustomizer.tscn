@@ -159,10 +159,10 @@ margin_bottom = 12.0
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 78.0
-margin_top = 78.0
-margin_right = -22.0
-margin_bottom = -22.0
+margin_left = 94.0
+margin_top = 94.0
+margin_right = -6.0
+margin_bottom = -6.0
 
 [node name="IconScrollContainer" type="ScrollContainer" parent="HBoxContainer/TabContainer"]
 visible = false
@@ -193,3 +193,6 @@ size_flags_vertical = 4
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="option_selected" from="HBoxContainer/OptionsContainer" to="HBoxContainer/TabContainer" method="_on_OptionsContainer_option_selected"]
 [connection signal="player_info_updated" from="HBoxContainer/TabContainer" to="HBoxContainer/PanelContainer" method="_on_info_received"]
+[connection signal="color_changed" from="HBoxContainer/TabContainer/InfoColorPicker" to="HBoxContainer/TabContainer" method="_on_InfoColorPicker_color_changed"]
+[connection signal="color_changed" from="HBoxContainer/TabContainer/StyleBoxTabContainer/OUTLINE" to="HBoxContainer/TabContainer" method="_on_OUTLINE_color_changed"]
+[connection signal="color_changed" from="HBoxContainer/TabContainer/XPBarColorPicker" to="HBoxContainer/TabContainer" method="_on_XPBarColorPicker_color_changed"]

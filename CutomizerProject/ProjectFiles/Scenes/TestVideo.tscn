@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="CameraTexture" id=1]
+camera_feed_id = 1
+camera_is_active = true
+
+[node name="TextureRect" type="TextureRect"]
+margin_right = 1928.0
+margin_bottom = 1084.0
+texture = SubResource( 1 )
+expand = true
+stretch_mode = 6

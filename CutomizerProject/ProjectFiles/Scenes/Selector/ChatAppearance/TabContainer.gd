@@ -5,30 +5,43 @@ onready var icon_container := $IconScrollContainer/VBoxContainer
 
 var icons := [[load("res://icon.png"), "Default", 0]]
 var icon_button = preload("res://Scenes/Buttons/IconButton.tscn")
-var player_info : Dictionary
+var player_info : Dictionary setget set_player_info
+var timer = Timer.new()
 
 signal icon_selected(button)
 signal player_info_updated(info)
+
+
+func _ready():
+	add_child(timer)
+	timer.set_wait_time(0.1)
+	timer.set_one_shot(true)
+
+
+func _on_ChatAppearanceCustomizer_info_received(info):
+	set_player_info(info)
+	load_icons()
+
+
+func set_player_info(info) -> void:
+	if !info.get("appearance", {}).get("bg"):
+		info["appearance"]["bg"] = {}
+	player_info = info
 
 
 func _on_OptionsContainer_option_selected(option):
 	set_current_tab(option)
 
 
-func _on_ChatAppearanceCustomizer_info_received(info):
-	player_info = info
-	load_icons()
-
-
-
 # ICONS ————————————————————————————————————————————————————————————————————————
 func _on_icon_selected(button:Button) -> void:
 	emit_signal("icon_selected", button)
-	player_info["appearance"]["icon"] = button._icon
+	player_info["appearance"]["icon"] = button._icon.get_data().data
 	emit_signal("player_info_updated", player_info)
 
-
 func load_icons() -> void:
+	if icon_container.get_child_count() > 0:
+		return
 	var icon_path := "res://Images/Icons/"
 	var dir := Directory.new()
 	
@@ -80,3 +93,25 @@ func title_case(string:String) -> String:
 		final.append(word)
 	
 	return final.join(" ")
+
+
+# INFO COLOR ———————————————————————————————————————————————————————————————————
+func _on_InfoColorPicker_color_changed(color:Color):
+	player_info["appearance"]["info_color"] = color.to_html()
+	emit_signal("player_info_updated", player_info)
+
+
+# XP BAR COLOR —————————————————————————————————————————————————————————————————
+func _on_XPBarColorPicker_color_changed(color):
+	player_info["appearance"]["xp_bar_color"] = color.to_html()
+	emit_signal("player_info_updated", player_info)
+
+
+# BACKGROUND ———————————————————————————————————————————————————————————————————
+func _on_OUTLINE_color_changed(color):
+	player_info["appearance"]["bg"]["outline"] = color.to_html()
+	emit_signal("player_info_updated", player_info)
+
+
+
+
