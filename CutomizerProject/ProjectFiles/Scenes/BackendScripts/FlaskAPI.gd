@@ -1,8 +1,8 @@
 extends Node
 
 
-#const FLASK_URL := "http://lsg-flask-api-env.eba-6hk8kiiv.us-east-1.elasticbeanstalk.com"
-const FLASK_URL := "http://127.0.0.1:5000"
+const FLASK_URL := "http://lsg-flask-api-env.eba-6hk8kiiv.us-east-1.elasticbeanstalk.com"
+#const FLASK_URL := "http://127.0.0.1:5000"
 
 
 func _on_token_recieved() -> void:

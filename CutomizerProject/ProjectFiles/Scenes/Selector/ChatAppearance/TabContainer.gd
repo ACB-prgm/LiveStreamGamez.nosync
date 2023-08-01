@@ -107,11 +107,10 @@ func _on_XPBarColorPicker_color_changed(color):
 	emit_signal("player_info_updated", player_info)
 
 
-# BACKGROUND ———————————————————————————————————————————————————————————————————
+# STYLEBOX ———————————————————————————————————————————————————————————————————
 func _on_OUTLINE_color_changed(color):
 	player_info["appearance"]["bg"]["outline"] = color.to_html()
 	emit_signal("player_info_updated", player_info)
-
 
 
 
