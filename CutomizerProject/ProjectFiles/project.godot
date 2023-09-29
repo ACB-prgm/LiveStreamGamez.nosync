@@ -20,6 +20,7 @@ Background="*res://Scenes/Background/Background.tscn"
 GoogleSignIn="*res://Scenes/BackendScripts/GoogleSignIn.gd"
 FlaskApi="*res://Scenes/BackendScripts/FlaskAPI.gd"
 GlobalWorldEnvironment="*res://Resources/WorldEnvironment.tscn"
+GlobalLabel="*res://delete/Label.tscn"
 
 [debug]
 

@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/Title/Title.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/TabMain/Tabs.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Selector/Selector.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Selector/ChatAppearance/ChatAppearanceCustomizer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://delete/Label.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -26,6 +27,9 @@ script = ExtResource( 2 )
 visible = false
 
 [node name="ChatAppearanceCustomizer" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="Label" parent="." instance=ExtResource( 5 )]
 visible = false
 
 [connection signal="change_tab" from="Title" to="." method="_on_change_tab"]

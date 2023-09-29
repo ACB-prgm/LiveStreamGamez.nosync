@@ -74,7 +74,7 @@ func get_user_info() -> Dictionary:
 	
 	var response = yield(http_request, "request_completed")
 	var response_body = parse_json(response[3].get_string_from_utf8())
-	
+
 	return response_body["info"]
 
 

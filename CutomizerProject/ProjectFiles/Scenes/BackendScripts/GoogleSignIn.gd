@@ -12,6 +12,7 @@ const SAVE_DIR = 'user://token/'
 var client_secrets : Dictionary
 var redirect_server := TCP_Server.new()
 var redirect_uri := "http://%s:%s" % [BINDING, PORT]
+#var redirect_uri := "https://acb-gamez.itch.io/test"
 var save_path = SAVE_DIR + 'token.dat'
 var token
 var id_token
@@ -33,16 +34,17 @@ func authorize(force_signin:=false) -> void:
 	if force_signin:
 		get_auth_code()
 	else:
-		if !(id_token and display_name):
-			get_auth_code()
-		else:
+		if (id_token and display_name) and is_token_valid():
 			yield(get_tree().create_timer(0.01), "timeout")
 			emit_signal("token_recieved")
+		else:
+			get_auth_code()
 
 
 # OAUTH2.0 FUNCTIONS ———————————————————————————————————————————————————————————
 func get_auth_code():
-	set_process(true)
+	if OS.get_name() != "HTML5":
+		set_process(true)
 	var _redir_err = redirect_server.listen(PORT, BINDING)
 
 	var body_parts = [
@@ -78,6 +80,10 @@ func _process(_delta):
 			redirect_server.stop()
 			
 			var auth_code = request.split("&scope")[0].split("=")[1]
+			
+			print(auth_code)
+			Background.move_head(Vector2(100, 100), null, 10)
+			yield(Background, "head_moved")
 			get_token_from_auth(auth_code)
 
 

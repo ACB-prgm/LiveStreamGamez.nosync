@@ -3,7 +3,7 @@ extends Control
 
 onready var tween = $Tween
 
-var force_sign_in := false
+var force_sign_in := true
 
 signal change_tab(from_obj, to_tab)
 
@@ -17,7 +17,7 @@ func _on_Button_pressed():
 	GoogleSignIn.authorize(force_sign_in)
 	yield(GoogleSignIn, "token_recieved")
 	force_sign_in = false
-	
+
 	emit_signal("change_tab", self, 1)
 
 
