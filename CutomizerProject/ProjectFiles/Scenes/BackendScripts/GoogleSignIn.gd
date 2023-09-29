@@ -33,11 +33,11 @@ func authorize(force_signin:=false) -> void:
 	if force_signin:
 		get_auth_code()
 	else:
-		if !(id_token and display_name):
-			get_auth_code()
-		else:
+		if (id_token and display_name) and is_token_valid():
 			yield(get_tree().create_timer(0.01), "timeout")
 			emit_signal("token_recieved")
+		else:
+			get_auth_code()
 
 
 # OAUTH2.0 FUNCTIONS ———————————————————————————————————————————————————————————
