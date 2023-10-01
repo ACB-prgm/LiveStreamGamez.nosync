@@ -1,22 +1,20 @@
 extends Node
 
 
-const PORT := 8000
-const BINDING := "127.0.0.1"
 const CLIENT_SECRET_PATH = "res://Scenes/BackendScripts/client_secret.dat"
-const AUTH_SERVER := "https://accounts.google.com/o/oauth2/v2/auth"
-const TOKEN_REQ := "https://oauth2.googleapis.com/token"
+const AUTH_API = "http://127.0.0.1:8000"
+const AUTH_URI := "https://accounts.google.com/o/oauth2/v2/auth"
+const TOKEN_URI := "https://oauth2.googleapis.com/token"
 const SAVE_DIR = 'user://token/'
 
 
 var client_secrets : Dictionary
-var redirect_server := TCP_Server.new()
-var redirect_uri := "http://%s:%s" % [BINDING, PORT]
-#var redirect_uri := "https://acb-gamez.itch.io/test"
 var save_path = SAVE_DIR + 'token.dat'
 var token
 var id_token
 var display_name : String
+var state_id : String
+var poll_timer : Timer
 
 signal token_recieved
 
@@ -28,7 +26,7 @@ func _ready():
 	client_secrets = load_client_secrets()
 	
 	load_tokens()
-
+	create_poll_timer()
 
 func authorize(force_signin:=false) -> void:
 	if force_signin:
@@ -40,85 +38,51 @@ func authorize(force_signin:=false) -> void:
 		else:
 			get_auth_code()
 
-
 # OAUTH2.0 FUNCTIONS ———————————————————————————————————————————————————————————
 func get_auth_code():
-	if OS.get_name() != "HTML5":
-		set_process(true)
-	var _redir_err = redirect_server.listen(PORT, BINDING)
-
-	var body_parts = [
-		"client_id=%s" % client_secrets.get("client_id"),
-		"redirect_uri=%s" % redirect_uri,
-		"response_type=code",
-		"scope=https://www.googleapis.com/auth/youtube.readonly%20openid",
-	]
-	var url = AUTH_SERVER + "?" + PoolStringArray(body_parts).join("&")
-
-# warning-ignore:return_value_discarded
-	OS.shell_open(url) # Opens window for user authentication
-
-
-func _process(_delta):
-	if redirect_server.is_connection_available():
-		var connection = redirect_server.take_connection()
-		var request = connection.get_string(connection.get_available_bytes())
-		if request:
-			set_process(false)
-
-			connection.put_data(("HTTP/1.1 %d\r\n" % 200).to_ascii())
-
-			connection.put_data(""""<!DOCTYPE html>
-								<html>
-								<head>
-								  <title>Hello</title>
-								</head>
-								<body>
-								  <h1>Hello, World!</h1>
-								</body>
-								</html>""".to_ascii())
-			redirect_server.stop()
-			
-			var auth_code = request.split("&scope")[0].split("=")[1]
-			
-			print(auth_code)
-			Background.move_head(Vector2(100, 100), null, 10)
-			yield(Background, "head_moved")
-			get_token_from_auth(auth_code)
-
-
-func get_token_from_auth(auth_code):
-	var headers = [
-		"Content-Type: application/x-www-form-urlencoded"
-	]
-	headers = PoolStringArray(headers)
-
-	var body_parts = [
-		"code=%s" % auth_code, 
-		"client_id=%s" % client_secrets.get("client_id"),
-		"client_secret=%s" % client_secrets.get("client_secret"),
-		"redirect_uri=%s" % redirect_uri,
-		"grant_type=authorization_code"
-	]
-
-	var body = PoolStringArray(body_parts).join("&")
-
-# warning-ignore:return_value_discarded
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
-
-	var error = http_request.request(TOKEN_REQ, headers, true, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(
+		AUTH_API.plus_file("/auth/store"), 
+		PoolStringArray(["Content-Type: application/json"]), 
+		true, 
+		HTTPClient.METHOD_PUT, 
+		to_json(create_auth_api_data())
+	)
+	
 	if error != OK:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
-
-	var response = yield(http_request, "request_completed")
-	var response_body = parse_json(response[3].get_string_from_utf8())
-
-	token = response_body["access_token"]
-	id_token = get_id_token_from_JWT(response_body["id_token"])
 	
-	save_tokens()
-	emit_signal("token_recieved")
+	var response = yield(http_request, "request_completed")
+	if response[1] == 200:
+		OS.shell_open(AUTH_API.plus_file("/auth/login/%s" % state_id)) # Opens window for user authentication
+		yield(get_tree().create_timer(5), "timeout")
+		poll_timer.start()
+	else:
+		print(response[3].get_string_from_utf8())
+
+
+func _on_poll_timer_timeout():
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
+	var error = http_request.request(AUTH_API.plus_file("/auth/check/%s" % state_id))
+	
+	if error != OK:
+		print(error)
+	
+	var response = yield(http_request, "request_completed")
+	match response[1]:
+		200:
+			poll_timer.stop()
+			var data = parse_json(response[3].get_string_from_utf8())
+			print(data)
+		201:
+			print(response[3].get_string_from_utf8())
+		_:
+			poll_timer.stop()
+			print("AUTH POLLING ERROR")
+			print(response[3].get_string_from_utf8())
+
 
 
 func is_token_valid() -> bool:
@@ -135,7 +99,7 @@ func is_token_valid() -> bool:
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	
-	var error = http_request.request(TOKEN_REQ + "info", headers, true, HTTPClient.METHOD_POST, body)
+	var error = http_request.request(TOKEN_URI + "info", headers, true, HTTPClient.METHOD_POST, body)
 	if error != OK:
 		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
 	
@@ -152,6 +116,32 @@ func is_token_valid() -> bool:
 
 
 # HELPER FUNCTIONS —————————————————————————————————————————————————————————————
+func create_poll_timer() -> void:
+	var timer := Timer.new()
+	add_child(timer)
+	timer.connect("timeout", self, "_on_poll_timer_timeout")
+	
+	self.poll_timer = timer
+
+func create_state_id() -> String:
+	var now_dict = Time.get_time_dict_from_system()
+	return "%s%s%s%s" % [Time.get_ticks_usec(), now_dict.hour, now_dict.minute, now_dict.second]
+
+func create_auth_api_data() -> Dictionary:
+	state_id = create_state_id()
+	
+	return {
+		"auth_uri" : AUTH_URI,
+		"token_uri" : TOKEN_URI,
+		"client_secret" : client_secrets["client_secret"],
+		"params" : {
+			"client_id" : client_secrets["client_id"],
+			"state" : state_id,
+			"response_type" : "code",
+			"scope" : "https://www.googleapis.com/auth/youtube.readonly openid",
+		}
+	}
+
 func save_tokens():
 	var dir = Directory.new()
 	if !dir.dir_exists(SAVE_DIR):
