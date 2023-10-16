@@ -13,21 +13,9 @@ _global_script_classes=[ {
 "class": "AWSDynamoDB",
 "language": "GDScript",
 "path": "res://AWS/AWSDynamoDB.gd"
-}, {
-"base": "Node",
-"class": "AWSs3",
-"language": "GDScript",
-"path": "res://AWS/AWSs3.gd"
-}, {
-"base": "Reference",
-"class": "XMLReader",
-"language": "GDScript",
-"path": "res://AWS/XMLReader.gd"
 } ]
 _global_script_class_icons={
-"AWSDynamoDB": "",
-"AWSs3": "",
-"XMLReader": ""
+"AWSDynamoDB": ""
 }
 
 [application]
