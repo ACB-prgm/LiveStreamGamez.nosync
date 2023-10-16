@@ -2,9 +2,10 @@ extends Node
 
 
 const CLIENT_SECRET_PATH = "res://Scenes/BackendScripts/client_secret.dat"
-const AUTH_API = "http://127.0.0.1:8000"
+const AUTH_API = "https://opalescent-agate-lemon.glitch.me"
 const AUTH_URI := "https://accounts.google.com/o/oauth2/v2/auth"
 const TOKEN_URI := "https://oauth2.googleapis.com/token"
+const YT_DATA_ENDPOINT = "https://www.googleapis.com/youtube/v3/channels"
 const SAVE_DIR = 'user://token/'
 
 
@@ -21,12 +22,15 @@ signal token_recieved
 
 # HIGH LEVEL FUNCTIONS —————————————————————————————————————————————————————————
 func _ready():
-	var _E = connect("token_recieved", FlaskApi, "_on_token_recieved")
 	set_process(false)
 	client_secrets = load_client_secrets()
 	
 	load_tokens()
 	create_poll_timer()
+	
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
+	var _error = http_request.request(AUTH_API)
 
 func authorize(force_signin:=false) -> void:
 	if force_signin:
@@ -75,7 +79,10 @@ func _on_poll_timer_timeout():
 		200:
 			poll_timer.stop()
 			var data = parse_json(response[3].get_string_from_utf8())
-			print(data)
+			token = data.get("access_token")
+			id_token = get_id_token_from_JWT(data.get("id_token"))
+			get_display_name()
+			
 		201:
 			print(response[3].get_string_from_utf8())
 		_:
@@ -83,6 +90,27 @@ func _on_poll_timer_timeout():
 			print("AUTH POLLING ERROR")
 			print(response[3].get_string_from_utf8())
 
+
+func get_display_name():
+	var headers = PoolStringArray([
+		"Authorization: Bearer %s" % token,
+		"Accept: application/json",
+	])
+	# Make YT Data API request
+	var params : PoolStringArray = [
+		"part=snippet",
+		"mine=true",
+	]
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
+	var error = http_request.request(YT_DATA_ENDPOINT + "?" + params.join("&"), 
+		headers, true, HTTPClient.METHOD_GET)
+	if error != OK:
+		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
+	
+	var response = yield(http_request, "request_completed")
+	print(response[3].get_string_from_utf8())
+	var response_body = parse_json(response[3].get_string_from_utf8())
 
 
 func is_token_valid() -> bool:
@@ -133,12 +161,17 @@ func create_auth_api_data() -> Dictionary:
 	return {
 		"auth_uri" : AUTH_URI,
 		"token_uri" : TOKEN_URI,
-		"client_secret" : client_secrets["client_secret"],
-		"params" : {
+		"auth_params" : {
 			"client_id" : client_secrets["client_id"],
 			"state" : state_id,
 			"response_type" : "code",
 			"scope" : "https://www.googleapis.com/auth/youtube.readonly openid",
+			"access_type" : "offline"
+		},
+		"token_params": {
+			"client_id" : client_secrets["client_id"],
+			"client_secret" : client_secrets["client_secret"],
+			"state" : state_id,
 		}
 	}
 
@@ -185,7 +218,7 @@ func get_id_token_from_JWT(JWT:String) -> String:
 	var payload = JWT.split(".")[1]
 	var json = Marshalls.base64_to_raw(base64url_to_base64(payload)).get_string_from_ascii()
 	json = parse_json(json)
-	
+
 	return json.get("sub")
 
 

@@ -8,6 +8,28 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Node",
+"class": "AWSDynamoDB",
+"language": "GDScript",
+"path": "res://AWS/AWSDynamoDB.gd"
+}, {
+"base": "Node",
+"class": "AWSs3",
+"language": "GDScript",
+"path": "res://AWS/AWSs3.gd"
+}, {
+"base": "Reference",
+"class": "XMLReader",
+"language": "GDScript",
+"path": "res://AWS/XMLReader.gd"
+} ]
+_global_script_class_icons={
+"AWSDynamoDB": "",
+"AWSs3": "",
+"XMLReader": ""
+}
+
 [application]
 
 config/name="LiveStreamCustomizer"
@@ -20,7 +42,6 @@ Background="*res://Scenes/Background/Background.tscn"
 GoogleSignIn="*res://Scenes/BackendScripts/GoogleSignIn.gd"
 FlaskApi="*res://Scenes/BackendScripts/FlaskAPI.gd"
 GlobalWorldEnvironment="*res://Resources/WorldEnvironment.tscn"
-GlobalLabel="*res://delete/Label.tscn"
 
 [debug]
 

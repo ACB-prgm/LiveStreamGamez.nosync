@@ -35,46 +35,46 @@ func _on_token_recieved() -> void:
 	GoogleSignIn.save_tokens()
 
 
-func update_user_info(info:Dictionary) -> void:
-	var id_token = GoogleSignIn.id_token
-	
-	var endpoint = "/users/id/%s/info" % id_token
-	var body = to_json({
-		"info" : info,
-	})
-	var headers = PoolStringArray([
-		"Content-Type: application/json"
-	])
-	
-	
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	var error = http_request.request(FLASK_URL.plus_file(endpoint), 
-		headers, true, HTTPClient.METHOD_PUT, body)
-	if error != OK:
-		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
-	
-	var response = yield(http_request, "request_completed")
-	var _response_body = parse_json(response[3].get_string_from_utf8())
-
-
-func get_user_info() -> Dictionary:
-	var id_token = GoogleSignIn.id_token
-	var endpoint = "/users/id/%s/info" % id_token
-	var headers = PoolStringArray([
-		"Content-Type: application/json"
-	])
-	
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-	var error = http_request.request(FLASK_URL.plus_file(endpoint), 
-		headers, true, HTTPClient.METHOD_GET, to_json({}))
-	if error != OK:
-		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
-	
-	var response = yield(http_request, "request_completed")
-	var response_body = parse_json(response[3].get_string_from_utf8())
-
-	return response_body["info"]
+#func update_user_info(info:Dictionary) -> void:
+#	var id_token = GoogleSignIn.id_token
+#
+#	var endpoint = "/users/id/%s/info" % id_token
+#	var body = to_json({
+#		"info" : info,
+#	})
+#	var headers = PoolStringArray([
+#		"Content-Type: application/json"
+#	])
+#
+#
+#	var http_request = HTTPRequest.new()
+#	add_child(http_request)
+#	var error = http_request.request(FLASK_URL.plus_file(endpoint), 
+#		headers, true, HTTPClient.METHOD_PUT, body)
+#	if error != OK:
+#		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
+#
+#	var response = yield(http_request, "request_completed")
+#	var _response_body = parse_json(response[3].get_string_from_utf8())
+#
+#
+#func get_user_info() -> Dictionary:
+#	var id_token = GoogleSignIn.id_token
+#	var endpoint = "/users/id/%s/info" % id_token
+#	var headers = PoolStringArray([
+#		"Content-Type: application/json"
+#	])
+#
+#	var http_request = HTTPRequest.new()
+#	add_child(http_request)
+#	var error = http_request.request(FLASK_URL.plus_file(endpoint), 
+#		headers, true, HTTPClient.METHOD_GET, to_json({}))
+#	if error != OK:
+#		push_error("An error occurred in the HTTP request with ERR Code: %s" % error)
+#
+#	var response = yield(http_request, "request_completed")
+#	var response_body = parse_json(response[3].get_string_from_utf8())
+#
+#	return response_body["info"]
 
 
