@@ -37,4 +37,5 @@ func _on_player_info_updated(info):
 
 
 func _on_Timer_timeout():
-	FlaskApi.update_user_info(info_to_push)
+	push_warning("update user here")
+#	FlaskApi.update_user_info(info_to_push)

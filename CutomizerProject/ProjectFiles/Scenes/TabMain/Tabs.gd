@@ -5,6 +5,7 @@ const TIME := 0.75
 
 onready var tween = $Tween
 
+
 func _on_change_tab(from_obj:Object, to_tab:int):
 	tween.interpolate_property(from_obj, "modulate:a", 1, 0, TIME, Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT)
 	tween.start()

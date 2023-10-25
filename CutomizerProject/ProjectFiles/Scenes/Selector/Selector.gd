@@ -16,7 +16,8 @@ func show_tab() -> void:
 	Background.move_head(Vector2(1750, 150))
 	Background.circle_visibile(true)
 	
-	player_info = yield(FlaskApi.get_user_info(), "completed")
+	push_warning("set player info here")
+	player_info = {} #yield(FlaskApi.get_user_info(), "completed")
 	emit_signal("info_received", player_info)
 	
 	var progression = player_info.get("progression")

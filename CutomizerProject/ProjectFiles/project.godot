@@ -28,8 +28,8 @@ config/icon="res://icon.png"
 
 Background="*res://Scenes/Background/Background.tscn"
 GoogleSignIn="*res://Scenes/BackendScripts/GoogleSignIn.gd"
-FlaskApi="*res://Scenes/BackendScripts/FlaskAPI.gd"
 GlobalWorldEnvironment="*res://Resources/WorldEnvironment.tscn"
+PlayerInfoManager="*res://Scenes/BackendScripts/PlayerInfoManager.gd"
 
 [debug]
 

@@ -3,19 +3,6 @@ extends Node
 
 
 const NO_CONTENT = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-const dynamodb_data_type_map := {
-	0: "NULL",
-	1: "BOOL",
-	2: "N",
-	3: "N",	
-	4: "S",
-	18: "M",
-	19: "L",
-	20: "B",
-	21: "NS",
-	22: "NS",
-	23: "SS",
-}
 
 var AWSACCESSKEYID : String
 var AWSSECRETKEY : String
@@ -37,7 +24,7 @@ func requirements_met(push_if:bool=false) -> bool:
 		return false
 	return true
 
-func put_item(table_name:String, item:Dictionary) -> Array:
+func put_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
 		var url = "https://%s/" % HOST
 		var timestamp = get_amz_time()
@@ -47,11 +34,11 @@ func put_item(table_name:String, item:Dictionary) -> Array:
 			"Item": item
 		})
 		
-		var add_headers = {
+		add_headers.merge({
 			"x-amz-target": "DynamoDB_20120810.PutItem",
 			"Content-Type": "application/x-amz-json-1.0",
 			"x-amz-content-sha256": body.sha256_text()
-		}
+		})
 
 		var headers = PoolStringArray([
 			"Authorization: %s" % create_authorization_header(HOST, timestamp, "POST", add_headers),
@@ -74,7 +61,7 @@ func put_item(table_name:String, item:Dictionary) -> Array:
 	else:
 		return []
 
-func get_item(table_name:String, item:Dictionary) -> Array:
+func get_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
 		var url = "https://%s/" % HOST
 		var timestamp = get_amz_time()
@@ -84,11 +71,11 @@ func get_item(table_name:String, item:Dictionary) -> Array:
 			"Key": item
 		})
 		
-		var add_headers = {
+		add_headers.merge({
 			"x-amz-target": "DynamoDB_20120810.GetItem",
 			"Content-Type": "application/x-amz-json-1.0",
 			"x-amz-content-sha256": body.sha256_text()
-		}
+		})
 
 		var headers = PoolStringArray([
 			"Authorization: %s" % create_authorization_header(HOST, timestamp, "POST", add_headers),
@@ -111,7 +98,7 @@ func get_item(table_name:String, item:Dictionary) -> Array:
 	else:
 		return []
 
-func delete_item(table_name:String, item:Dictionary) -> Array:
+func delete_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
 		var url = "https://%s/" % HOST
 		var timestamp = get_amz_time()
@@ -121,11 +108,11 @@ func delete_item(table_name:String, item:Dictionary) -> Array:
 			"Key": item
 		})
 		
-		var add_headers = {
+		add_headers.merge({
 			"x-amz-target": "DynamoDB_20120810.DeleteItem",
 			"Content-Type": "application/x-amz-json-1.0",
 			"x-amz-content-sha256": body.sha256_text()
-		}
+		})
 
 		var headers = PoolStringArray([
 			"Authorization: %s" % create_authorization_header(HOST, timestamp, "POST", add_headers),
@@ -148,33 +135,7 @@ func delete_item(table_name:String, item:Dictionary) -> Array:
 	else:
 		return []
 
-func encode_dynamodb_item(item: Dictionary) -> Dictionary:
-	var encoded = {}
-	for key in item:
-		var value = item[key]
-		var dynamo_type = dynamodb_data_type_map.get(typeof(value), null)
-		if dynamo_type:
-			match dynamo_type:
-				"M":
-					value = encode_dynamodb_item(value)
-				"N":
-					value = str(value)
-				"L":
-					var list_encoded : Array = []
-					for elem in value:
-						list_encoded.append(encode_dynamodb_item({"item": elem})["item"])
-					value = list_encoded
-				"NS":
-					var num_set : PoolStringArray = []
-					for elem in value:
-						num_set.append(str(elem))
-					value = num_set
-			encoded[key] = {dynamo_type : value}
-		else:
-			push_error("ERROR: DICT CONTAINS UN-ENCODABLE TYPE: " + str(value))
-			return {}
-	
-	return encoded
+
 
 # LOW LEVEL FUNCTIONS ——————————————————————————————————————————————————————————
 func UriEncode(base:String, obj_key_name:String="") -> String:
