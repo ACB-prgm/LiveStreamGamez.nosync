@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "AWSDynamoDB",
+"language": "GDScript",
+"path": "res://AWS/AWSDynamoDB.gd"
+}, {
 "base": "Particles2D",
 "class": "Particles2D_Plus",
 "language": "GDScript",
 "path": "res://Particles2D+.gd"
 } ]
 _global_script_class_icons={
+"AWSDynamoDB": "",
 "Particles2D_Plus": "res://GPUParticles2D_Icon.svg"
 }
 
@@ -33,6 +39,7 @@ YoutTubeApi="*res://ChatScraping/YoutTubeAPI.gd"
 TaskManagerGlobals="*res://TaskManager/TaskManagerGlobals.gd"
 OAuth2="*res://OAuth2_Test/OAuth2_Test.gd"
 FlaskAPI="*res://ChatXP/FlaskAPI/FlaskAPI.gd"
+PlayerInfoManager="*res://ChatXP/PlayerInfoManager.gd"
 
 [debug]
 
