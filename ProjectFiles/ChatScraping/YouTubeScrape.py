@@ -1,4 +1,4 @@
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 import socket
@@ -9,7 +9,7 @@ import sys
 
 
 opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-LiveStream_URL = "https://www.youtube.com/watch?v=5qap5aO4i9A"
+LiveStream_URL = "https://www.youtube.com/watch?v=4xDzrJKXOOY"
 YouTube_BaseURL = "https://www.youtube.com"
 UDP_IP = "127.0.0.1"
 UDP_PORT = 4243
@@ -79,14 +79,13 @@ def get_chat(driver):
             # print("retrying...")
             continue
 
-
 def create_driver():
     # Chrome options: https://peter.sh/experiments/chromium-command-line-switches/
     options_ = webdriver.ChromeOptions()
     options_.add_argument('window-size=100,100')
     options_.add_argument('window-position=10000,0')
 
-    return webdriver.Chrome(ChromeDriverManager().install(), options=options_)
+    return webdriver.Chrome(options=options_)
 
 
 def print_list(list):

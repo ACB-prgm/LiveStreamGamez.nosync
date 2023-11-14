@@ -21,7 +21,7 @@ var default_player_info = {
 		"icon" : null
 	}
 }
-var ChatPlayerData = {}
+var ChatPlayerData = {} # {username : data_dict}
 
 onready var chatBox = $VBoxContainer/ScrollContainer/ChatVBoxContainer
 onready var tween = $Tween
@@ -29,16 +29,11 @@ onready var chat_timer = $Timer
 
 
 func _ready() -> void:
-	yield(FlaskAPI.update_all_users_info({}), "completed")
 	modulate.a = ALPHA_VALUE
-	var data = yield(FlaskAPI.get_all_users_info(), "completed")
-	if data:
-		ChatPlayerData = data
-		log_info(data)
 	
 	var _err = GetPythonChatScrape.connect("chat_packet_recieved", self, "_on_chat_packet_recieved")
 	# TESTING
-	_on_chat_packet_recieved([ ["Joe", "hello"], ["Rickle", "howdy"], ["Joe", "hey now"], ["YoungWood", "test"]])
+#	_on_chat_packet_recieved([ ["YoungWood", "Thumbnail Key", "test"]])
 
 
 # CHAT FUNCTIONS ———————————————————————————————————————————————————————————————
@@ -47,6 +42,7 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 #	current_stream = YoutTubeApi.LiveBroadcastResource.get("snippet").get("title")
 	current_stream = "test"
 	for comment in chat:
+#		PlayerInfoManager.get_player_info(user, thumb_id)
 		var user = comment[0].percent_encode()
 		comment = comment[1]
 		var info : Dictionary
@@ -85,7 +81,7 @@ func _on_chat_packet_recieved(chat:Array) -> void:
 		progression_info["xpbar_value"] = progression_info.get("level_xp") / TaskManagerGlobals.level_func(progression_info.get("level")) * 100
 		
 		ChatPlayerData[user] = info # Update working info
-		FlaskAPI.update_user_info(user, info) # Update Cloud info
+		PlayerInfoManager.update_user_info(user, info) # Update Cloud info
 		
 		# DISPLAY CHAT AND UPDATES
 		spawn_chatPlayer(user, comment, info, previous_level_xp, xp_gain, level_up)

@@ -38,7 +38,6 @@ GetPythonChatScrape="*res://ChatScraping/GetPythonChatScrape.gd"
 YoutTubeApi="*res://ChatScraping/YoutTubeAPI.gd"
 TaskManagerGlobals="*res://TaskManager/TaskManagerGlobals.gd"
 OAuth2="*res://OAuth2_Test/OAuth2_Test.gd"
-FlaskAPI="*res://ChatXP/FlaskAPI/FlaskAPI.gd"
 PlayerInfoManager="*res://ChatXP/PlayerInfoManager.gd"
 
 [debug]

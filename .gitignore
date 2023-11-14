@@ -4,7 +4,7 @@ ProjectFiles/OAuth2/client_secrets.json
 ProjectFiles/OAuth2/stored_credentials.pickle
 ProjectFiles/OAuth2/token_info.json
 ProjectFiles/ChatXP/FlaskAPI/key.dat
-ProjectFiles/ChatXP/aws_secrets.json
+ProjectFiles/AWS/aws_secrets.dat
 LSG_Flask_API/lsg_venv
 CutomizerProject/ProjectFiles/Scenes/BackendScripts/client_secret.dat
 LSG_Flask_API/LSG_API_venv/

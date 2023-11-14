@@ -28,7 +28,7 @@ func put_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
 		var url = "https://%s/" % HOST
 		var timestamp = get_amz_time()
-
+		
 		var body = to_json({
 			"TableName": table_name,
 			"Item": item
@@ -39,18 +39,18 @@ func put_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 			"Content-Type": "application/x-amz-json-1.0",
 			"x-amz-content-sha256": body.sha256_text()
 		})
-
+		
 		var headers = PoolStringArray([
 			"Authorization: %s" % create_authorization_header(HOST, timestamp, "POST", add_headers),
 			"x-amz-content-sha256: %s" % add_headers["x-amz-content-sha256"],
 			"x-amz-date: %s" % timestamp
 		])
-
+		
 		for header in add_headers:
 			var new_header := "%s: %s" % [header, add_headers.get(header)]
 			if not new_header in headers:
 				headers.append(new_header)
-
+		
 		var http_request = HTTPRequest.new()
 		get_tree().root.call_deferred("add_child", http_request)
 		http_request.call_deferred("request", url, headers, true, HTTPClient.METHOD_POST, body)
@@ -60,7 +60,6 @@ func put_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 		return response
 	else:
 		return []
-
 
 func batch_put_item(table_name: String, items: Array, add_headers: Dictionary = {}) -> Array:
 	if requirements_met(true):
@@ -109,8 +108,6 @@ func batch_put_item(table_name: String, items: Array, add_headers: Dictionary = 
 	else:
 		return []
 
-
-
 func get_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
 		var url = "https://%s/" % HOST
@@ -147,6 +144,46 @@ func get_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 		return response
 	else:
 		return []
+
+func batch_get_item(table_name:String, keys:Array, consistent_read:=true, add_headers:Dictionary={}) -> Array:
+	if requirements_met(true):
+		var url = "https://%s/" % HOST
+		var timestamp = get_amz_time()
+		
+		var body = to_json({
+			"RequestItems": {table_name : {
+				"ConsistentRead": consistent_read,
+				"Keys": keys
+				}}
+		})
+		
+		add_headers.merge({
+			"x-amz-target": "DynamoDB_20120810.BatchGetItem",
+			"Content-Type": "application/x-amz-json-1.0",
+			"x-amz-content-sha256": body.sha256_text()
+		})
+		
+		var headers = PoolStringArray([
+			"Authorization: %s" % create_authorization_header(HOST, timestamp, "POST", add_headers),
+			"x-amz-content-sha256: %s" % add_headers["x-amz-content-sha256"],
+			"x-amz-date: %s" % timestamp
+		])
+		
+		for header in add_headers:
+			var new_header := "%s: %s" % [header, add_headers.get(header)]
+			if not new_header in headers:
+				headers.append(new_header)
+		
+		var http_request = HTTPRequest.new()
+		get_tree().root.call_deferred("add_child", http_request)
+		http_request.call_deferred("request", url, headers, true, HTTPClient.METHOD_POST, body)
+		
+		var response = yield(http_request, "request_completed")
+		http_request.queue_free()
+		return response
+	else:
+		return []
+
 
 func delete_item(table_name:String, item:Dictionary, add_headers:={}) -> Array:
 	if requirements_met(true):
