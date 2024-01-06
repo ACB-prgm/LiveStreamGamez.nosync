@@ -1,7 +1,17 @@
 extends Node
 
 
-const FRAME_THRESH = 1200 # ~20 seconds
+# TODO
+# 1. √ Create decode_dynamo_db function and 
+# 1.5. implement decode function in get_item functions
+# 2. implement chunking for player_stack > MAX reads/writes
+# 3. figure out ChatPlayer.gd interaction with This script
+
+# Assuming avg player info size of 178 bytes
+const MAX_WRITES_PER_SECOND = 28 # 5,120 bytes per second (5 WCUs)
+const MAX_READS_PER_SECOND = 115 # 20,480 bytes per second (5 RCUs - Inconsistent)
+
+const FRAME_THRESH = 600 # ~10 seconds
 const TABLE_NAME = "LSG_user_data"
 const REGION = "us-east-1"
 const dynamodb_data_type_map := {
@@ -51,18 +61,22 @@ func _ready():
 	add_child(dynamo_db)
 	dynamo_db.init(AWS_KEY, AWS_SECRET, REGION)
 	
-	player_info_stack["YoungWood/APkrFKbGGhT4v0N6PxIIOVb0bwG_FCWGuf1dMKnCNyCL"] = {"changed": true, "info": example_player_info}
-	player_info_stack["Testy/uajhgregkerkajlg678"] = {"changed": true, "info" : {"display_name": "Testy", "thumbnail_id": "uajhgregkerkajlg678", "values": true}}
+	var encoded = encode_dynamodb_item(example_player_info)
 	
-	var response = yield(pull_player_stack(), "completed")
-	print(response[0])
-	print(response[-1].get_string_from_utf8())
+	print(decode_dynamodb_item(encoded))
+#	player_info_stack["YoungWood/APkrFKbGGhT4v0N6PxIIOVb0bwG_FCWGuf1dMKnCNyCL"] = {"changed": true, "info": example_player_info}
+#	player_info_stack["Testy/uajhgregkerkajlg678"] = {"changed": true, "info" : {"display_name": "Testy", "thumbnail_id": "uajhgregkerkajlg678", "values": true}}
+#
+#	var response = yield(pull_player_stack(), "completed")
+#	print(response[0])
+#	print(response[-1].get_string_from_utf8())
 #	var ERR = yield(update_player_info(), "completed")
 #	if ERR != OK:
 #		yield(GoogleSignIn._on_AWS_expired(), "completed")
 #		ERR = yield(update_player_info(), "completed")
 #		if ERR != OK:
 #			push_error(ERR)
+
 
 func _physics_process(_delta):
 	frame_count += 1
@@ -82,11 +96,11 @@ func sync_player_infos():
 	# push infos
 	pass
 
-func put_player_stack():
+func put_player_stack(force:=false):
 	var items = []
 	for player in player_info_stack:
 		player = player_info_stack.get(player)
-		if player["changed"]:
+		if force or player["changed"]:
 			items.append(encode_dynamodb_item(player["info"]))
 	
 	var response = yield(dynamo_db.batch_put_item(TABLE_NAME, items), "completed")
@@ -102,7 +116,7 @@ func pull_player_stack():
 			"thumbnail_id": info["thumbnail_id"]
 			}))
 	
-	var response = yield(dynamo_db.batch_get_item(TABLE_NAME, keys), "completed")
+	var response = yield(dynamo_db.batch_get_item(TABLE_NAME, keys, false), "completed")
 	
 	return response
 
@@ -123,7 +137,7 @@ func get_player_info(display_name:String, thumbnail_id:String, force_pull:= fals
 
 	if response[1] == 200:
 		var info = parse_json(response[-1].get_string_from_utf8())
-		player_info_stack[fullname] = info
+		player_info_stack[fullname] = decode_dynamodb_item(info)
 		return info
 	else:
 		return response[1]
@@ -183,6 +197,41 @@ func encode_dynamodb_item(item: Dictionary) -> Dictionary:
 			return {}
 	
 	return encoded
+
+func decode_dynamodb_item(dynamo_item: Dictionary) -> Dictionary:
+	var decoded = {}
+	for key in dynamo_item:
+		var dynamo_value = dynamo_item[key]
+		for data_type in dynamo_value.keys():
+			match data_type:
+				"NULL":
+					decoded[key] = null
+				"BOOL":
+					decoded[key] = bool(dynamo_value[data_type])
+				"N":
+					decoded[key] = float(dynamo_value[data_type])
+				"S":
+					decoded[key] = dynamo_value[data_type]
+				"M":
+					decoded[key] = decode_dynamodb_item(dynamo_value[data_type])
+				"L":
+					var list_decoded = []
+					for elem in dynamo_value[data_type]:
+						list_decoded.append(decode_dynamodb_item(elem))
+					decoded[key] = list_decoded
+				"NS":
+					var num_set = []
+					for elem in dynamo_value[data_type]:
+						num_set.append(float(elem))
+					decoded[key] = num_set
+				"SS":
+					decoded[key] = dynamo_value[data_type]
+				"B":
+					decoded[key] = PoolByteArray(Marshalls.base64_to_raw(dynamo_value[data_type]))
+				_:
+					push_error("ERROR: DICT CONTAINS UNKNOWN DYNAMO TYPE: " + data_type)
+					return {}
+	return decoded
 
 func load_secrets():
 	var file = File.new()
